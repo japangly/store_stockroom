@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "605394527263",
+    "firebase_url": "https://mickey-salon.firebaseio.com",
+    "project_id": "mickey-salon",
+    "storage_bucket": "mickey-salon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:605394527263:android:cbe3aaa681a13bd5",
+        "android_client_info": {
+          "package_name": "com.jpeg.store_stockroom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAGztB7Af3bGlvRcBXaijr5PmSuA3u-jm8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "605394527263-l7s8umluangdtek34jgi6oqujb6tlia6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "605394527263-omsvsd4db846ph9bsa6hsv6aakcdh2r4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jpeg.storeStockroom"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
