@@ -130,6 +130,8 @@ PODS:
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
+  - printing (0.0.1):
+    - Flutter
   - Protobuf (3.7.0)
   - Reachability (3.2)
   - TOCropViewController (2.5.0)
@@ -145,6 +147,7 @@ DEPENDENCIES:
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - keyboard_visibility (from `.symlinks/plugins/keyboard_visibility/ios`)
+  - printing (from `.symlinks/plugins/printing/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -189,6 +192,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_picker/ios"
   keyboard_visibility:
     :path: ".symlinks/plugins/keyboard_visibility/ios"
+  printing:
+    :path: ".symlinks/plugins/printing/ios"
 
 SPEC CHECKSUMS:
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
@@ -217,6 +222,7 @@ SPEC CHECKSUMS:
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
+  printing: 341873b2b3771c7226e301bfa4fc608e8ac60a30
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   TOCropViewController: d86078d3a57a70c116bf3db7c89c80046a0e5fdf
