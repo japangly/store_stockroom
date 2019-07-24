@@ -2,8 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
-import 'package:store_stockroom/dialogs/delete.dart';
-import 'package:store_stockroom/dialogs/edit_product.dart';
+import 'package:store_stockroom/dialogs/delete_dialog.dart';
+import 'package:store_stockroom/dialogs/edit_dialog.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 import 'env.dart';
 import 'themes/helpers/fonts.dart';
@@ -164,7 +164,7 @@ class ProductDetails extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (_) {
-                          return Delete();
+                          return DeleteDialog();
                         });
                   },
                 ),
@@ -182,7 +182,7 @@ class ProductDetails extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (_) {
-                          return EditProduct();
+                          return EditDialog();
                         });
                   },
                 ),

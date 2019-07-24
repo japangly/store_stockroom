@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:store_stockroom/dialogs/add_category_dialog.dart';
 
-import 'dialogs/add_category.dart';
 import 'env.dart';
 
 class AddProduct extends StatelessWidget {
@@ -25,7 +25,7 @@ class AddProduct extends StatelessWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => AddCategory(),
+                builder: (_) => AddCategoryDialog(),
               );
             },
           )
