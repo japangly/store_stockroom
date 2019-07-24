@@ -76,7 +76,6 @@ class _LoginState extends State<LoginScreen> {
                           validators: [
                             FormBuilderValidators.required(
                                 errorText: 'Email address cannot be empty.'),
-                            FormBuilderValidators.email(),
                             FormBuilderValidators.email(
                                 errorText:
                                     'Email address need to be a valid email address.'),
