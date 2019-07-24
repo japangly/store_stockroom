@@ -6,5 +6,6 @@
         "Schyler",
         "barcode",
         "firestore"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
