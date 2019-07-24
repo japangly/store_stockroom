@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
-import 'add_category.dart';
+import 'dialogs/add_category.dart';
 import 'env.dart';
 
 class AddProduct extends StatelessWidget {

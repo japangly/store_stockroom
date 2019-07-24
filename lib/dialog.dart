@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/buttons.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
@@ -36,53 +34,39 @@ class _MyDialogState extends State<MyDialog> {
     return AlertDialog(
       elevation: 10,
       contentPadding:
-          const EdgeInsets.only(top: 10.0, right: 50, left: 50, bottom: 0.0),
+          const EdgeInsets.only(top: 40.0, right: 50, left: 50, bottom: 0.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10),
-          height: Environment().getHeight(height: 7),
+          width: Environment().getWidth(width: 18),
+          height: Environment().getHeight(height: 15),
           child: Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
+                  Icon(
+                    Icons.phone,
+                    color: removeColor,
+                    size: 80.0,
+                  ),
                   Text(
-                    "Edit",
-                    style: font20Grey,
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: FormBuilderTextField(
-                  attribute: "quantity",
-                  style: font15Grey,
-                  decoration: InputDecoration(
-                    labelText: "Quantity",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    "Phone Number Not Found",
+                    style: TextStyle(fontSize: 30, fontFamily: 'Avenir'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: Text(
+                      "You may have not registered yet.",
+                      style: font20Grey,
                     ),
                   ),
-                  validators: [
-                    FormBuilderValidators.requiredTrue(),
-                    FormBuilderValidators.maxLength(20),
-                  ],
-                ),
+                  Text(
+                    "Please contact your HR!",
+                    style: font20Grey,
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CustomButton(
-                      onPressed: () {},
-                      textButton: 'Save',
-                      colorButton: confirmColor,
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),
