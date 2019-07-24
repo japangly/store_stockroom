@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/history.dart';
+
+import 'splash_screen.dart';
 
 void main() {
   runApp(
     MaterialApp(
       title: 'store_stockroom',
-      home: HistoryScreen(),
+      home: SplashScreen(),
     ),
   );
 }

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_icons/entypo.dart';
 import 'package:flutter_icons/ionicons.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/buttons.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+
+import 'themes/helpers/fonts.dart';
+import 'themes/helpers/theme_colors.dart';
 
 class HistoryScreen extends StatefulWidget {
   @override
@@ -18,14 +16,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Column(
-            children: <Widget>[
-              Text('History'),
-            ],
-          ),
-        ),
         body: Column(
           children: <Widget>[
             Column(

@@ -11,25 +11,26 @@ class DoneDialog extends StatelessWidget {
           const EdgeInsets.only(top: 20.0, right: 20, left: 20, bottom: 0.0),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      content: Container(
-        width: Environment().getWidth(width: 10),
-        height: Environment().getHeight(height: 4),
-        child: Column(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Icon(
-                  Icons.check_circle_outline,
-                  size: 50,
-                  color: confirmColor,
-                ),
-                Text(
-                  'Done!',
-                  style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
-                ),
-              ],
-            ),
-          ],
+      content: SingleChildScrollView(
+        child: Container(
+          width: Environment().getWidth(width: 10),
+          child: Column(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Icon(
+                    Icons.check_circle_outline,
+                    size: 50,
+                    color: confirmColor,
+                  ),
+                  Text(
+                    'Done!',
+                    style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
