@@ -101,87 +101,100 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.person,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return UserProfile();
-                },
-              ),
-            );
-          },
-        ),
-        centerTitle: true,
-        title: Text('store_stockroom'),
-        actions: <Widget>[
-          IconButton(
+        appBar: AppBar(
+          leading: IconButton(
             icon: Icon(
-              Icons.search,
+              Icons.person,
               color: Colors.white,
             ),
             onPressed: () {
-              _showMaterialSearch(context);
-            },
-          )
-        ],
-      ),
-      body: _widgetOptions.elementAt(_selectedIndex),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            title: Text('Inventory'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.spellcheck),
-            title: Text('To-Confirm'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            title: Text('History'),
-          ),
-        ],
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedIndex,
-        onTap: _onTappedView,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () async {
-          await ImagePicker.pickImage(source: ImageSource.camera).then(
-            (file) async {
-              imageFile = await ImageCropper.cropImage(
-                sourcePath: file.path,
-                toolbarTitle: 'Edit Image',
-                toolbarColor: Colors.blue,
-                toolbarWidgetColor: Colors.white,
-                ratioX: 1.0,
-                ratioY: 1.0,
-                maxWidth: 512,
-                maxHeight: 512,
-              );
-            },
-          ).whenComplete(
-            () {
               Navigator.push(
                 context,
-                PageTransition(
-                child: AddProduct(),
-                type: PageTransitionType.downToUp,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return UserProfile();
+                  },
                 ),
               );
             },
-          );
-        },
-      ),
-    );
+          ),
+          centerTitle: true,
+          title: Text('store_stockroom'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                _showMaterialSearch(context);
+              },
+            )
+          ],
+        ),
+        body: _widgetOptions.elementAt(_selectedIndex),
+        bottomNavigationBar: BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.dashboard),
+              title: Text('Inventory'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.spellcheck),
+              title: Text('To-Confirm'),
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.history),
+              title: Text('History'),
+            ),
+          ],
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _selectedIndex,
+          onTap: _onTappedView,
+        ),
+        floatingActionButton: _bottomButtons());
+  }
+
+  Widget _bottomButtons() {
+    switch (_selectedIndex) {
+      case 0:
+        return FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await ImagePicker.pickImage(source: ImageSource.camera).then(
+              (file) async {
+                imageFile = await ImageCropper.cropImage(
+                  sourcePath: file.path,
+                  toolbarTitle: 'Edit Image',
+                  toolbarColor: Colors.blue,
+                  toolbarWidgetColor: Colors.white,
+                  ratioX: 1.0,
+                  ratioY: 1.0,
+                  maxWidth: 512,
+                  maxHeight: 512,
+                );
+              },
+            ).whenComplete(
+              () {
+                Navigator.push(
+                  context,
+                  PageTransition(
+                    child: AddProduct(),
+                    type: PageTransitionType.downToUp,
+                  ),
+                );
+              },
+            );
+          },
+        );
+        break;
+      case 2:
+        return FloatingActionButton(
+          child: Icon(Icons.print),
+          onPressed: () {},
+        );
+        break;
+    }
   }
 }
 
