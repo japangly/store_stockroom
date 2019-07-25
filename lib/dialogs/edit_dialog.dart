@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:store_stockroom/env.dart';
@@ -6,6 +7,9 @@ import 'package:store_stockroom/themes/helpers/fonts.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 class EditDialog extends StatelessWidget {
+  String documentId;
+  DocumentSnapshot document;
+  EditDialog({this.documentId, this.document, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

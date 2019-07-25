@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:store_stockroom/database.dart';
 import 'package:store_stockroom/print.dart';
 
 import 'add_product.dart';
@@ -34,17 +36,8 @@ List<Widget> _widgetOptions = <Widget>[
   ),
   HistoryScreen(),
 ];
-List<String> _names = [
-  'Igor Minar',
-  'Brad Green',
-  'Dave Geddes',
-  'Naomi Black',
-  'Greg Weber',
-  'Dean Sofer',
-  'Wes Alvaro',
-  'John Scott',
-  'Daniel Nadasi',
-];
+List<String> _names = [];
+List<DocumentSnapshot> documents;
 
 class _HomeScreenState extends State<HomeScreen> {
   File imageFile;
@@ -57,31 +50,39 @@ class _HomeScreenState extends State<HomeScreen> {
           isInitialRoute: false,
         ),
         builder: (BuildContext context) {
-          return Material(
-            child: MaterialSearch<String>(
-              placeholder: 'Search',
-              results: _names
-                  .map((String v) => MaterialSearchResult<String>(
-                        icon: Icons.person,
-                        value: v,
-                        text: "Mr(s). $v",
-                      ))
-                  .toList(),
-              filter: (dynamic value, String criteria) {
-                return value
-                    .toLowerCase()
-                    .trim()
-                    .contains(RegExp(r'' + criteria.toLowerCase().trim() + ''));
-              },
-              onSelect: (dynamic value) => Navigator.push(
-                    context,
-                    PageTransition(
-                        child: ProductDetails(),
-                        type: PageTransitionType.rightToLeftWithFade),
+          return StreamBuilder<QuerySnapshot>(
+              stream: Database().getProducts(
+                collection: 'products',
+                orderBy: 'name',
+              ),
+              builder: (context, snapshot) {
+                return Material(
+                  child: MaterialSearch<String>(
+                    placeholder: 'Search',
+                    results: documents
+                        .map((DocumentSnapshot v) =>
+                            MaterialSearchResult<String>(
+                              // icon: Icons.person,
+                              value: v.documentID,
+                              text: v.data['name'],
+                            ))
+                        .toList(),
+                    filter: (dynamic value, String criteria) {
+                      return value.toLowerCase().trim().contains(
+                          RegExp(r'' + criteria.toLowerCase().trim() + ''));
+                    },
+                    onSelect: (dynamic value) => Navigator.push(
+                      context,
+                      PageTransition(
+                          child: ProductDetails(
+                              documentId: value, documents: documents),
+                          type: PageTransitionType.rightToLeftWithFade),
+                    ),
+                    onSubmit: (String value) =>
+                        Navigator.of(context).pop(value),
                   ),
-              onSubmit: (String value) => Navigator.of(context).pop(value),
-            ),
-          );
+                );
+              });
         });
   }
 
@@ -127,8 +128,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.search,
                 color: Colors.white,
               ),
-              onPressed: () {
-                _showMaterialSearch(context);
+              onPressed: () async {
+                _names = [];
+                try {
+                  documents = await Database().getAllCollection(
+                      collection: 'products', sortBy: 'name', order: true);
+                  for (int i = 0; i < documents.length; i++) {
+                    _names.add(documents[i].data['name']);
+                    documents[i].documentID;
+                  }
+                  _showMaterialSearch(context);
+                } catch (e) {
+                  print(e);
+                }
               },
             )
           ],
