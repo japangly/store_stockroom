@@ -17,14 +17,7 @@ class _UserProfileState extends State<UserProfile> {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Text('Profile'),
-              ),
-            ],
-          ),
+          title: Text('Profile'),
         ),
         body: Column(
           children: <Widget>[
@@ -32,8 +25,8 @@ class _UserProfileState extends State<UserProfile> {
               padding: const EdgeInsets.only(top: 20.0, bottom: 15.0),
               child: Center(
                 child: Container(
-                  width: Environment().getHeight(height: 10),
-                  height: Environment().getHeight(height: 10),
+                  width: Environment().getHeight(height: 8),
+                  height: Environment().getHeight(height: 8),
                   child: CircleAvatar(
                     minRadius: Environment().getHeight(height: 3),
                     maxRadius: Environment().getHeight(height: 3),
@@ -70,7 +63,6 @@ class _UserProfileState extends State<UserProfile> {
             ),
             Expanded(
               child: ListView(
-                physics: NeverScrollableScrollPhysics(),
                 children: ListTile.divideTiles(context: context, tiles: [
                   ListTile(
                     title: Text(
