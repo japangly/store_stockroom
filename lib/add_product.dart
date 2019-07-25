@@ -8,7 +8,12 @@ import 'package:store_stockroom/dialogs/add_category_dialog.dart';
 import 'dialogs/duplicate_dialog.dart';
 import 'env.dart';
 
-class AddProduct extends StatelessWidget {
+class AddProduct extends StatefulWidget {
+  @override
+  _AddProductState createState() => _AddProductState();
+}
+
+class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
@@ -114,6 +119,20 @@ class AddProduct extends StatelessWidget {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(
+                            left: 20.0, right: 20.0, top: 20),
+                        child: FormBuilderTextField(
+                          keyboardType: TextInputType.text,
+                          attribute: 'description',
+                          decoration: InputDecoration(
+                            labelText: 'Description',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
                             left: 20.0, right: 20.0, top: 20.0),
                         child: Row(
                           children: <Widget>[
@@ -142,14 +161,6 @@ class AddProduct extends StatelessWidget {
                                   onPressed: () {},
                                 )),
                           ],
-                        ),
-                      ),
-                      new ClipRRect(
-                        borderRadius: new BorderRadius.circular(8.0),
-                        child: Image.network(
-                          'https://mocdn.gs1.org/sites/default/files/docs/barcodes/ITF-14.png',
-                          height: 200.0,
-                          width: 150.0,
                         ),
                       ),
                     ],

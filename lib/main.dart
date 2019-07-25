@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-
-import 'splash_screen.dart';
+import 'package:store_stockroom/home_screen.dart';
 
 void main() {
   runApp(
     MaterialApp(
       title: 'store_stockroom',
-      home: SplashScreen(),
+      home: HomeScreen(),
     ),
   );
 }

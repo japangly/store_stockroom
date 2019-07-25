@@ -72,7 +72,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                 defaultString == 'Added'
                     ? defaultColor = listColor[0]
                     : defaultColor = listColor[1];
-                    
+
                 defaultString == 'Added'
                     ? defaultIcon = listIcon[0]
                     : defaultIcon = listIcon[1];
@@ -208,8 +208,8 @@ class HistoryCardView extends StatelessWidget {
         Column(
           children: <Widget>[
             Container(
-              height: 64.0,
-              width: 64.0,
+              height: 35.0,
+              width: 35.0,
               child: Card(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(

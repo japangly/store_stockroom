@@ -6,6 +6,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:store_stockroom/print.dart';
 
 import 'add_product.dart';
 import 'history.dart';
@@ -73,11 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     .contains(RegExp(r'' + criteria.toLowerCase().trim() + ''));
               },
               onSelect: (dynamic value) => Navigator.push(
-                context,
-                PageTransition(
-                    child: ProductDetails(),
-                    type: PageTransitionType.rightToLeftWithFade),
-              ),
+                    context,
+                    PageTransition(
+                        child: ProductDetails(),
+                        type: PageTransitionType.rightToLeftWithFade),
+                  ),
               onSubmit: (String value) => Navigator.of(context).pop(value),
             ),
           );
@@ -191,7 +192,16 @@ class _HomeScreenState extends State<HomeScreen> {
       case 2:
         return FloatingActionButton(
           child: Icon(Icons.print),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return PrintScreen();
+                },
+              ),
+            );
+          },
         );
         break;
     }
