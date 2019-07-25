@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+import 'package:store_stockroom/themes/helpers/buttons.dart';
+import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 void main() => runApp(MaterialApp(home: Home()));
 
@@ -39,29 +42,45 @@ class _MyDialogState extends State<MyDialog> {
       content: SingleChildScrollView(
         child: Container(
           width: Environment().getWidth(width: 10),
-          height: Environment().getHeight(height: 6),
           child: Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Icon(
-                    Icons.warning,
-                    color: Colors.yellow,
-                    size: 50.0,
+                    SimpleLineIcons.getIconData("printer"),
+                    color: Colors.blue,
+                    size: 60.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 20.0),
                     child: Text(
-                      "Duplicate Input!",
-                      style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
+                      "You are printing a report of 20/12/2019",
+                      style: TextStyle(fontSize: 15),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      'The product is already exists.',
-                      style: font15Grey,
-                      textAlign: TextAlign.center,
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        CustomButton(
+                          onPressed: () {
+                            DatePicker.showDatePicker(context,
+                                showTitleActions: true,
+                                minTime: DateTime(2019, 1, 1),
+                                onChanged: (date) {
+                              print('change $date');
+                            }, onConfirm: (date) {
+                              print('confirm $date');
+                            },
+                                currentTime: DateTime.now(),
+                                locale: LocaleType.en);
+                          },
+                          textButton: 'Print',
+                          colorButton: confirmColor,
+                        ),
+                      ],
                     ),
                   )
                 ],
