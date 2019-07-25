@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:core';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreenStyles extends StatefulWidget {
   SplashScreenStyles(
@@ -102,9 +103,9 @@ class _SplashScreenStylesState extends State<SplashScreenStyles> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      CircularProgressIndicator(
-                        valueColor: new AlwaysStoppedAnimation<Color>(
-                            widget.loaderColor),
+                      SpinKitThreeBounce(
+                        color: widget.loaderColor,
+                        size: 50.0,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
