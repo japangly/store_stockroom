@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -6,6 +11,7 @@ import 'add_product.dart';
 import 'history.dart';
 import 'inventory_screen.dart';
 import 'product_details.dart';
+import 'user_profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -40,9 +46,8 @@ List<String> _names = [
 ];
 
 class _HomeScreenState extends State<HomeScreen> {
+  File imageFile;
   String name = 'No one';
-
-  final _formKey = new GlobalKey<FormState>();
 
   _buildMaterialSearchPage(BuildContext context) {
     return MaterialPageRoute<String>(
@@ -62,8 +67,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ))
                   .toList(),
               filter: (dynamic value, String criteria) {
-                return value.toLowerCase().trim().contains(
-                    new RegExp(r'' + criteria.toLowerCase().trim() + ''));
+                return value
+                    .toLowerCase()
+                    .trim()
+                    .contains(RegExp(r'' + criteria.toLowerCase().trim() + ''));
               },
               onSelect: (dynamic value) => Navigator.push(
                 context,
@@ -100,7 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
             Icons.person,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return UserProfile();
+                },
+              ),
+            );
+          },
         ),
         centerTitle: true,
         title: Text('store_stockroom'),
@@ -138,25 +154,43 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-              context,
-              PageTransition(
+        onPressed: () async {
+          await ImagePicker.pickImage(source: ImageSource.camera).then(
+            (file) async {
+              imageFile = await ImageCropper.cropImage(
+                sourcePath: file.path,
+                toolbarTitle: 'Edit Image',
+                toolbarColor: Colors.blue,
+                toolbarWidgetColor: Colors.white,
+                ratioX: 1.0,
+                ratioY: 1.0,
+                maxWidth: 512,
+                maxHeight: 512,
+              );
+            },
+          ).whenComplete(
+            () {
+              Navigator.push(
+                context,
+                PageTransition(
                 child: AddProduct(),
                 type: PageTransitionType.downToUp,
-              ));
+                ),
+              );
+            },
+          );
         },
       ),
     );
   }
 }
 
-class SearchDetail extends StatefulWidget {
+class SearchDetails extends StatefulWidget {
   @override
-  _SearchDetailState createState() => _SearchDetailState();
+  _SearchDetailsState createState() => _SearchDetailsState();
 }
 
-class _SearchDetailState extends State<SearchDetail> {
+class _SearchDetailsState extends State<SearchDetails> {
   int _selectIndex = 2;
 
   @override

@@ -24,7 +24,7 @@ class Home extends StatelessWidget {
 
 class MyDialog extends StatefulWidget {
   @override
-  _MyDialogState createState() => new _MyDialogState();
+  _MyDialogState createState() => _MyDialogState();
 }
 
 class _MyDialogState extends State<MyDialog> {

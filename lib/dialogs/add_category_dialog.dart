@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:store_stockroom/themes/helpers/buttons.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+
 import '../env.dart';
-import 'duplicate_dialog.dart';
+import '../themes/helpers/buttons.dart';
+import '../themes/helpers/fonts.dart';
+import '../themes/helpers/theme_colors.dart';
 
 class AddCategoryDialog extends StatelessWidget {
   @override
