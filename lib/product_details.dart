@@ -5,6 +5,7 @@ import 'package:flutter_icons/octicons.dart';
 import 'package:store_stockroom/dialogs/delete_dialog.dart';
 import 'package:store_stockroom/dialogs/edit_dialog.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
 import 'env.dart';
 import 'themes/helpers/fonts.dart' as ft;
 import 'themes/helpers/theme_colors.dart';
@@ -15,23 +16,6 @@ class ProductDetails extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        bottom: PreferredSize(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 20.0),
-            child: Column(
-              children: <Widget>[
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFZ1T_DlCjC2KZNwXCJc80wIsWoSJDWDr3bGInOsuVMhDelJKC',
-                    height: Environment().getHeight(height: 7.0),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          preferredSize: Size(0.0, Environment().getHeight(height: 8.0)),
-        ),
         title: Column(
           children: <Widget>[
             Padding(
@@ -48,6 +32,25 @@ class ProductDetails extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            Center(
+              child: Container(
+                decoration:
+                    new BoxDecoration(color: prefix0.whiteColor, boxShadow: [
+                  new BoxShadow(
+                    color: Colors.black,
+                    blurRadius: 2.0,
+                  ),
+                ]),
+                width: double.infinity,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    'https://www.natio.com.au/pub/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/h/a/haircare_2019_product_web_images_dc_shampoo.jpg',
+                    height: Environment().getHeight(height: 10.0),
+                  ),
+                ),
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
@@ -74,12 +77,12 @@ class ProductDetails extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData("primitive-dot"),
-                        color: Colors.green[300],
+                        color: Colors.green[500],
                       ),
                       Text(
-                        'In Stock: 300',
+                        'In Stock: 500',
                         style: TextStyle(
-                          color: Colors.green[300],
+                          color: Colors.green[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -89,12 +92,12 @@ class ProductDetails extends StatelessWidget {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData("primitive-dot"),
-                        color: Colors.orange[300],
+                        color: Colors.orange[500],
                       ),
                       Text(
                         'In Use: 10',
                         style: TextStyle(
-                          color: Colors.orange[300],
+                          color: Colors.orange[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -130,7 +133,7 @@ class ProductDetails extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Created at: 20/03/2019',
-                        style: TextStyle(color: blueColor),
+                        style: TextStyle(color: Colors.blue[500]),
                       ),
                     ],
                   ),
@@ -138,7 +141,7 @@ class ProductDetails extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         'Updated at: 20/09/2019',
-                        style: TextStyle(color: Colors.green),
+                        style: TextStyle(color: Colors.green[500]),
                       ),
                     ],
                   ),
@@ -148,46 +151,43 @@ class ProductDetails extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 20.0),
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              flex: 30,
-              child: RaisedButton(
-                padding: const EdgeInsets.all(8.0),
-                textColor: Colors.white,
-                color: removeColor,
-                child: new Text("Delete"),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return DeleteDialog();
-                      });
-                },
-              ),
+      bottomNavigationBar: Row(
+        children: <Widget>[
+          Expanded(
+            flex: 30,
+            child: RaisedButton(
+              padding: const EdgeInsets.all(15.0),
+              textColor: Colors.white,
+              color: removeColor,
+              child: new Text("Delete"),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return DeleteDialog();
+                    });
+              },
             ),
-            Expanded(
-              flex: 70,
-              child: RaisedButton(
-                textColor: Colors.white,
-                color: Colors.blue,
-                padding: const EdgeInsets.all(8.0),
-                child: new Text(
-                  "Edit",
-                ),
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (_) {
-                        return EditDialog();
-                      });
-                },
+          ),
+          Expanded(
+            flex: 70,
+            child: RaisedButton(
+              textColor: Colors.white,
+              color: Colors.blue,
+              padding: const EdgeInsets.all(15.0),
+              child: new Text(
+                "Edit",
               ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return EditDialog();
+                    });
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
