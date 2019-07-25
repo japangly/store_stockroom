@@ -3,6 +3,7 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:store_stockroom/dialogs/print_dialog.dart';
 import 'package:store_stockroom/themes/helpers/buttons.dart';
+import 'package:store_stockroom/themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class PrintScreen extends StatefulWidget {
@@ -15,6 +16,20 @@ class _PrintScreenState extends State<PrintScreen> {
   Widget build(BuildContext context) {
     return Container(
       child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 15.0),
+                child: Text(
+                  'Print Report',
+                  style: font20White,
+                ),
+              ),
+            ],
+          ),
+        ),
         body: Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

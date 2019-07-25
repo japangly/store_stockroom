@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/print.dart';
+import 'package:store_stockroom/home_screen.dart';
 
 void main() {
   runApp(
     MaterialApp(
       title: 'store_stockroom',
-      home: PrintScreen(),
+      home: HomeScreen(),
     ),
   );
 }
