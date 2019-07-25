@@ -13,6 +13,8 @@ class AddProduct extends StatefulWidget {
   _AddProductState createState() => _AddProductState();
 }
 
+String _selectedSort = 'Category';
+
 class _AddProductState extends State<AddProduct> {
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class _AddProductState extends State<AddProduct> {
 
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text('Add Product'),
         actions: <Widget>[
           IconButton(
@@ -40,152 +43,126 @@ class _AddProductState extends State<AddProduct> {
         behavior: HitTestBehavior.translucent,
         child: Container(
           child: SingleChildScrollView(
-            child: FormBuilder(
-              key: _fbKey,
-              //autovalidate: true,
-              //readonly: false,
-              child: Column(
-                children: <Widget>[
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 40.0),
-                      child: CircleAvatar(
-                        radius: Environment().getHeight(height: 3),
-                        backgroundImage: NetworkImage(
-                          'https://cdn.shopify.com/s/files/1/0838/7991/products/Shampoo_copy.jpg?v=1547159160',
-                        ),
+            child: Column(
+              children: <Widget>[
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 40.0),
+                    child: CircleAvatar(
+                      radius: Environment().getHeight(height: 3),
+                      backgroundImage: NetworkImage(
+                        'https://cdn.shopify.com/s/files/1/0838/7991/products/Shampoo_copy.jpg?v=1547159160',
                       ),
                     ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 20),
-                        child: FormBuilderTextField(
-                          keyboardType: TextInputType.text,
-                          attribute: 'product_name',
-                          decoration: InputDecoration(
-                            labelText: 'Product Name',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: 'Product name cannot be empty.'),
-                            FormBuilderValidators.maxLength(50),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 10.0, bottom: 10.0),
-                        child: FormBuilderDropdown(
-                          attribute: "category",
-                          decoration: InputDecoration(labelText: "Category"),
-                          hint: Text('Select Category'),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: 'Category cannot be empty.')
-                          ],
-                          items: ['Shampoo', 'Conditioner']
-                              .map((category) => DropdownMenuItem(
-                                    value: category,
-                                    child: Text('$category'),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-                        child: FormBuilderTextField(
-                          keyboardType: TextInputType.number,
-                          attribute: 'quantity',
-                          decoration: InputDecoration(
-                            labelText: 'Quantity',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          valueTransformer: (text) => num.tryParse(text),
-                          validators: [
-                            FormBuilderValidators.required(
-                                errorText: 'Quantity cannot be empty.'),
-                            FormBuilderValidators.numeric(),
-                            FormBuilderValidators.max(1000),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 20),
-                        child: FormBuilderTextField(
-                          keyboardType: TextInputType.text,
-                          attribute: 'description',
-                          decoration: InputDecoration(
-                            labelText: 'Description',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                            left: 20.0, right: 20.0, top: 20.0),
-                        child: Row(
-                          children: <Widget>[
-                            Expanded(
-                              flex: 4,
-                              child: FormBuilderTextField(
-                                keyboardType: TextInputType.text,
-                                attribute: 'barcode',
-                                decoration: InputDecoration(
-                                  labelText: 'Barcode',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                ),
-                                validators: [
-                                  FormBuilderValidators.required(
-                                      errorText: 'Barcode cannot be empty.'),
-                                ],
+                ),
+                Column(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 20),
+                          child: TextField(
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              labelText: 'Product Name',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            Expanded(
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 30.0, right: 30.0, top: 10.0, bottom: 10.0),
+                          child: DropdownButtonFormField(
+                            decoration: InputDecoration(),
+                            hint: Text(_selectedSort),
+                            items: ['Shampoo', 'Conditioner']
+                                .map((category) => DropdownMenuItem(
+                                      value: category,
+                                      child: Text(category),
+                                    ))
+                                .toList(),
+                            onChanged: (selected) {
+                              setState(() {
+                                _selectedSort = selected;
+                              });
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(left: 20.0, right: 20.0),
+                          child: TextFormField(
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: 'Quantity',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 20),
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(
+                              labelText: 'Description',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20.0, right: 20.0, top: 20.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 4,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                    labelText: 'Barcode',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
                                 flex: 1,
                                 child: IconButton(
                                   icon:
                                       Icon(Ionicons.getIconData("ios-barcode")),
                                   onPressed: () {},
-                                )),
-                          ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (_) => DuplicateDialog(),
-          );
-          _fbKey.currentState.save();
-          if (_fbKey.currentState.validate()) {
-            print(_fbKey.currentState.value);
-          } else {
-            print('validate failed');
-          }
-        },
-        child: Icon(Icons.save),
-      ),
+          child: Icon(Icons.save),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (_) => DuplicateDialog(),
+            );
+          }),
     );
   }
 }
