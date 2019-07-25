@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   CustomButton({
     @required this.onPressed,
     @required this.textButton,
@@ -12,6 +12,11 @@ class CustomButton extends StatelessWidget {
   String textButton;
 
   @override
+  _CustomButtonState createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  @override
   Widget build(BuildContext context) {
     return RaisedButton(
       shape: RoundedRectangleBorder(
@@ -20,9 +25,9 @@ class CustomButton extends StatelessWidget {
         ),
       ),
       textColor: Colors.white,
-      child: Text(textButton),
-      color: colorButton,
-      onPressed: onPressed,
+      child: Text(widget.textButton),
+      color: widget.colorButton,
+      onPressed: widget.onPressed,
     );
   }
 }

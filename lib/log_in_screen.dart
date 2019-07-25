@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:store_stockroom/dialogs/email_not_found_dialog.dart';
 
 import 'env.dart';
 import 'home_screen.dart';
@@ -121,7 +120,7 @@ class _LoginState extends State<LoginScreen> {
                               bottom: 10,
                             ),
                             child: Text(
-                              'Next',
+                              'Login',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Avenir',

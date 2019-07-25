@@ -6,8 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'database.dart';
-
 class PlaygroundScreen extends StatefulWidget {
   @override
   _PlaygroundScreenState createState() => _PlaygroundScreenState();

@@ -16,12 +16,11 @@ class Database {
     @required String sortBy,
     @required bool order,
   }) async {
-    var firestore = Firestore.instance;
-    QuerySnapshot qn = await firestore
+    QuerySnapshot snapshot = await Firestore.instance
         .collection(collection)
         .orderBy(sortBy, descending: order)
         .getDocuments();
-    return qn.documents;
+    return snapshot.documents;
   }
 
   Future createCollection(
@@ -66,10 +65,26 @@ class Database {
     @required String collection,
     @required String documentId,
   }) async {
-    DocumentSnapshot getcollection = await Firestore.instance
+    return await Firestore.instance
         .collection(collection)
         .document(documentId)
         .get();
-    return getcollection;
+  }
+
+  Future<DocumentSnapshot> getCollectionByField({
+    @required String collection,
+    @required String field,
+    @required String value,
+  }) async {
+    try {
+      QuerySnapshot snapshot = await Firestore.instance
+          .collection(collection)
+          .where(field, isEqualTo: value)
+          .limit(1)
+          .getDocuments();
+      return snapshot.documents.first;
+    } catch (e) {
+      return null;
+    }
   }
 }

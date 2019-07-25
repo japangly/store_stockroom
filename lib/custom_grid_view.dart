@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_icons/octicons.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:store_stockroom/product_details.dart';
 
-import 'env.dart';
+import 'product_details.dart';
 
 class CardGridView extends StatefulWidget {
   @override
