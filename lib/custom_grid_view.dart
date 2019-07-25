@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter_icons/octicons.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:store_stockroom/product_details.dart';
 
@@ -78,20 +80,34 @@ class _CardGridViewState extends State<CardGridView> {
                                 children: <Widget>[
                                   Flexible(
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: <Widget>[
-                                        AutoSizeText(
-                                          'In Service',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                          minFontSize: 8.0,
-                                          maxFontSize: 128.0,
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Octicons.getIconData(
+                                                  "primitive-dot"),
+                                              color: Colors.orange[500],
+                                            ),
+                                            AutoSizeText(
+                                              'In Use',
+                                              style: TextStyle(
+                                                color: Colors.orange[500],
+                                              ),
+                                              minFontSize: 8.0,
+                                              maxFontSize: 128.0,
+                                            ),
+                                          ],
                                         ),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4.0),
                                           child: AutoSizeText(
-                                            '12',
+                                            '100',
+                                            style: TextStyle(
+                                                color: Colors.orange[500],
+                                                fontWeight: FontWeight.bold),
                                             minFontSize: 8.0,
                                             maxFontSize: 128.0,
                                           ),
@@ -102,19 +118,31 @@ class _CardGridViewState extends State<CardGridView> {
                                   Flexible(
                                     child: Column(
                                       children: <Widget>[
-                                        AutoSizeText(
-                                          'In Stock',
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                          minFontSize: 8.0,
-                                          maxFontSize: 128.0,
+                                        Row(
+                                          children: <Widget>[
+                                            Icon(
+                                              Octicons.getIconData(
+                                                  "primitive-dot"),
+                                              color: Colors.green[500],
+                                            ),
+                                            AutoSizeText(
+                                              'In Stock',
+                                              style: TextStyle(
+                                                color: Colors.green[500],
+                                              ),
+                                              minFontSize: 8.0,
+                                              maxFontSize: 128.0,
+                                            ),
+                                          ],
                                         ),
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 4.0),
                                           child: AutoSizeText(
-                                            '12',
+                                            '200',
+                                            style: TextStyle(
+                                                color: Colors.green[500],
+                                                fontWeight: FontWeight.bold),
                                             minFontSize: 8.0,
                                             maxFontSize: 128.0,
                                           ),
