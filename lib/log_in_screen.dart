@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
@@ -29,23 +31,35 @@ class _LoginState extends State<LoginScreen> {
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
-              Container(
-                height: 300.0,
-                color: Colors.blue,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Icon(
-                      Icons.content_cut,
-                      size: 128.0,
-                      color: Colors.white,
+              Stack(
+                children: <Widget>[
+                  Container(
+                      child: Image.asset(
+                        'assets/images/login_bg.jpg',
+                      ),
+                      height: 300),
+                  Container(
+                    height: 275.0,
+                    color: Colors.black54,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.content_cut,
+                          size: 100.0,
+                          color: whiteColor,
+                        ),
+                        Text(
+                          'LOGIN',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40,
+                              color: whiteColor),
+                        ),
+                      ],
                     ),
-                    Text(
-                      'LOGIN',
-                      style: font30White,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 230.0),
@@ -72,7 +86,6 @@ class _LoginState extends State<LoginScreen> {
                                     Text(
                                       'Enter your',
                                       style: TextStyle(
-                                        fontFamily: 'Avenir',
                                         fontWeight: FontWeight.bold,
                                         fontSize: 24.0,
                                       ),
@@ -80,7 +93,6 @@ class _LoginState extends State<LoginScreen> {
                                     Text(
                                       'Email address',
                                       style: TextStyle(
-                                        fontFamily: 'Avenir',
                                         fontSize: 20.0,
                                       ),
                                     ),
