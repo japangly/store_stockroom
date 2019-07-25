@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:material_search/material_search.dart';
+import 'package:page_transition/page_transition.dart';
 
-import 'custom_grid_view.dart';
+import 'add_product.dart';
+import 'history.dart';
+import 'inventory_screen.dart';
+import 'product_details.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -15,16 +19,13 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-int _swapIndex = 0;
-List<Widget> _swapWidget = <Widget>[
-  Text('List 1'),
-  Text('Grid 2'),
-];
 int _selectedIndex = 0;
 List<Widget> _widgetOptions = <Widget>[
-  CardGridView(),
-  Text('Screen 2'),
-  Text('Screen 3'),
+  InventoryScreen(),
+  Center(
+    child: Text('Coming Soon Brader... :)'),
+  ),
+  HistoryScreen(),
 ];
 List<String> _names = [
   'Igor Minar',
@@ -66,9 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               onSelect: (dynamic value) => Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) => SearchDetail(),
-                ),
+                PageTransition(
+                    child: ProductDetails(),
+                    type: PageTransitionType.rightToLeftWithFade),
               ),
               onSubmit: (String value) => Navigator.of(context).pop(value),
             ),
@@ -115,48 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(),
-              ),
-              CheckNameCreateAt(),
-              Expanded(
-                child: Container(),
-              ),
-              CheckUpperLower(),
-              Expanded(
-                child: Container(),
-              ),
-              Expanded(
-                child: IconButton(
-                  icon: Icon(Icons.list),
-                  onPressed: () {
-                    setState(() {
-                      _swapIndex = 0;
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                child: IconButton(
-                  icon: Icon(Icons.dashboard),
-                  onPressed: () {
-                    setState(() {
-                      _swapIndex = 1;
-                    });
-                  },
-                ),
-              ),
-            ],
-          ),
-          Container(
-            child: _widgetOptions.elementAt(_selectedIndex),
-          ),
-        ],
-      ),
+      body: _widgetOptions.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -176,71 +136,15 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onTappedView,
       ),
-    );
-  }
-}
-
-String _selectedSort = 'Name';
-String _selectedLetter = 'Lower';
-
-class CheckUpperLower extends StatefulWidget {
-  const CheckUpperLower({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _CheckUpperLowerState createState() => _CheckUpperLowerState();
-}
-
-class _CheckUpperLowerState extends State<CheckUpperLower> {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 3,
-      child: DropdownButton<String>(
-        hint: Text(_selectedLetter),
-        items: <String>['Upper', 'Lower'].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (selected) {
-          setState(() {
-            _selectedLetter = selected;
-          });
-        },
-      ),
-    );
-  }
-}
-
-class CheckNameCreateAt extends StatefulWidget {
-  const CheckNameCreateAt({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _CheckNameCreateAtState createState() => _CheckNameCreateAtState();
-}
-
-class _CheckNameCreateAtState extends State<CheckNameCreateAt> {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      flex: 3,
-      child: DropdownButton<String>(
-        hint: Text(_selectedSort),
-        items: <String>['name', 'create_at'].map((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: Text(value),
-          );
-        }).toList(),
-        onChanged: (selected) {
-          setState(() {
-            _selectedSort = selected;
-          });
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+              context,
+              PageTransition(
+                child: AddProduct(),
+                type: PageTransitionType.downToUp,
+              ));
         },
       ),
     );
@@ -263,17 +167,5 @@ class _SearchDetailState extends State<SearchDetail> {
         title: Text(_names.elementAt(_selectIndex)),
       ),
     );
-  }
-}
-
-class SwapWidget extends StatefulWidget {
-  @override
-  _SwapWidgetState createState() => _SwapWidgetState();
-}
-
-class _SwapWidgetState extends State<SwapWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return _swapWidget.elementAt(_swapIndex);
   }
 }

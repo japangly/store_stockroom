@@ -2,52 +2,50 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
-import 'package:store_stockroom/dialogs/delete.dart';
-import 'package:store_stockroom/dialogs/edit_product.dart';
+import 'package:store_stockroom/dialogs/delete_dialog.dart';
+import 'package:store_stockroom/dialogs/edit_dialog.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 import 'env.dart';
-import 'themes/helpers/fonts.dart';
+import 'themes/helpers/fonts.dart' as ft;
 import 'themes/helpers/theme_colors.dart';
 
 class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: whiteColor,
-          bottom: PreferredSize(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 20.0),
-              child: Column(
-                children: <Widget>[
-                  new ClipRRect(
-                    borderRadius: new BorderRadius.circular(8.0),
-                    child: Image.network(
-                      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFZ1T_DlCjC2KZNwXCJc80wIsWoSJDWDr3bGInOsuVMhDelJKC',
-                      height: 150.0,
-                      width: 200.0,
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        bottom: PreferredSize(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(80.0, 0.0, 80.0, 20.0),
+            child: Column(
+              children: <Widget>[
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFZ1T_DlCjC2KZNwXCJc80wIsWoSJDWDr3bGInOsuVMhDelJKC',
+                    height: Environment().getHeight(height: 7.0),
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          preferredSize: Size(0.0, Environment().getHeight(height: 8.0)),
+        ),
+        title: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 15.0),
+              child: Text(
+                'Product Details',
+                style: ft.font20White,
               ),
             ),
-            preferredSize: Size(0.0, Environment().getHeight(height: 8)),
-          ),
-          title: Column(
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(top: 15.0),
-                child: Text(
-                  'Product Details',
-                  style: font20Grey,
-                ),
-              ),
-            ],
-          ),
+          ],
         ),
-        body: Column(
+      ),
+      body: SingleChildScrollView(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Padding(
@@ -64,7 +62,7 @@ class ProductDetails extends StatelessWidget {
               padding: const EdgeInsets.only(top: 5.0, left: 10.0),
               child: Text(
                 'Shampoo',
-                style: font15Grey,
+                style: ft.font15Grey,
               ),
             ),
             Padding(
@@ -105,7 +103,7 @@ class ProductDetails extends StatelessWidget {
                 ],
               ),
             ),
-            new Container(
+            Container(
                 margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20),
                 child: Divider(
                   color: Colors.black,
@@ -115,7 +113,7 @@ class ProductDetails extends StatelessWidget {
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
                 'Description',
-                style: font20Black,
+                style: ft.font20Black,
               ),
             ),
             Padding(
@@ -149,46 +147,46 @@ class ProductDetails extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: Padding(
-          padding: EdgeInsets.only(bottom: 20.0),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                flex: 30,
-                child: RaisedButton(
-                  padding: const EdgeInsets.all(8.0),
-                  textColor: Colors.white,
-                  color: removeColor,
-                  child: new Text("Delete"),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return Delete();
-                        });
-                  },
-                ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 20.0),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              flex: 30,
+              child: RaisedButton(
+                padding: const EdgeInsets.all(8.0),
+                textColor: Colors.white,
+                color: removeColor,
+                child: new Text("Delete"),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return DeleteDialog();
+                      });
+                },
               ),
-              Expanded(
-                flex: 70,
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.blue,
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Text(
-                    "Edit",
-                  ),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (_) {
-                          return EditProduct();
-                        });
-                  },
+            ),
+            Expanded(
+              flex: 70,
+              child: RaisedButton(
+                textColor: Colors.white,
+                color: Colors.blue,
+                padding: const EdgeInsets.all(8.0),
+                child: new Text(
+                  "Edit",
                 ),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return EditDialog();
+                      });
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,33 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:store_stockroom/env.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
+import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: RaisedButton(
-      child: Text('Open Dialog'),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return MyDialog();
-            });
-      },
-    )));
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  @override
-  _MyDialogState createState() => new _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
+class FailDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -38,28 +14,27 @@ class _MyDialogState extends State<MyDialog> {
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10),
-          height: Environment().getHeight(height: 6),
+          width: Environment().getWidth(width: 10.0),
           child: Column(
             children: <Widget>[
               Column(
                 children: <Widget>[
                   Icon(
-                    Icons.warning,
-                    color: Colors.yellow,
+                    Icons.error,
+                    color: removeColor,
                     size: 50.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Duplicate Input!",
+                      "Oops!",
                       style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
-                      'The product is already exists.',
+                      'Please check your input again.',
                       style: font15Grey,
                       textAlign: TextAlign.center,
                     ),

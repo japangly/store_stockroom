@@ -2,32 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_stockroom/env.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
 
-void main() => runApp(MaterialApp(home: Home()));
-
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: RaisedButton(
-      child: Text('Open Dialog'),
-      onPressed: () {
-        showDialog(
-            context: context,
-            builder: (_) {
-              return MyDialog();
-            });
-      },
-    )));
-  }
-}
-
-class MyDialog extends StatefulWidget {
-  @override
-  _MyDialogState createState() => new _MyDialogState();
-}
-
-class _MyDialogState extends State<MyDialog> {
+class DuplicateDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -39,7 +14,6 @@ class _MyDialogState extends State<MyDialog> {
       content: SingleChildScrollView(
         child: Container(
           width: Environment().getWidth(width: 10),
-          height: Environment().getHeight(height: 6),
           child: Column(
             children: <Widget>[
               Column(
@@ -57,7 +31,7 @@ class _MyDialogState extends State<MyDialog> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
                       'The product is already exists.',
                       style: font15Grey,

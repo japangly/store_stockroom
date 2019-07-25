@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/flutter_icons.dart';
+import 'package:store_stockroom/dialogs/add_category_dialog.dart';
 
-import 'dialogs/add_category.dart';
+import 'dialogs/duplicate_dialog.dart';
 import 'env.dart';
 
 class AddProduct extends StatelessWidget {
@@ -14,10 +15,6 @@ class AddProduct extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back_ios),
-          onPressed: () {},
-        ),
         title: Text('Add Product'),
         actions: <Widget>[
           IconButton(
@@ -25,7 +22,7 @@ class AddProduct extends StatelessWidget {
             onPressed: () {
               showDialog(
                 context: context,
-                builder: (_) => AddCategory(),
+                builder: (_) => AddCategoryDialog(),
               );
             },
           )
@@ -165,6 +162,10 @@ class AddProduct extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          showDialog(
+            context: context,
+            builder: (_) => DuplicateDialog(),
+          );
           _fbKey.currentState.save();
           if (_fbKey.currentState.validate()) {
             print(_fbKey.currentState.value);
