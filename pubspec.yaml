@@ -32,6 +32,8 @@ dependencies:
   flutter_icons: ^0.1.4
   material_search: ^0.2.8
   flutter_datetime_picker: ^1.2.5
+  auto_size_text: ^2.0.2+1
+  page_transition: ^1.1.4
 
 
 

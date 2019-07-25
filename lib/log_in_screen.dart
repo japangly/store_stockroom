@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:store_stockroom/dialogs/email_not_found_dialog.dart';
 
 import 'env.dart';
+import 'home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -94,6 +96,16 @@ class _LoginState extends State<LoginScreen> {
                           ),
                           color: Colors.blue,
                           onPressed: () {
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (_) => EmailNotFoundDialog(),
+                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (BuildContext context) => HomeScreen(),
+                              ),
+                            );
                             _fbKey.currentState.save();
                             if (_fbKey.currentState.validate()) {
                               print(_fbKey.currentState.value);
