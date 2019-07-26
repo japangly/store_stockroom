@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/flutter_icons.dart';
-import 'package:store_stockroom/dialogs/add_category_dialog.dart';
-
-import 'dialogs/duplicate_dialog.dart';
+import 'package:store_stockroom/add_category.dart';
 import 'env.dart';
 
 class AddProduct extends StatefulWidget {
@@ -28,9 +26,13 @@ class _AddProductState extends State<AddProduct> {
           IconButton(
             icon: Icon(MaterialIcons.getIconData("playlist-add")),
             onPressed: () {
-              showDialog(
-                context: context,
-                builder: (_) => AddCategoryDialog(),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return AddCategory();
+                  },
+                ),
               );
             },
           )
@@ -150,19 +152,33 @@ class _AddProductState extends State<AddProduct> {
                     ),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    children: <Widget>[
+                      Expanded(
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                            Radius.circular(8.0),
+                          )),
+                          textColor: Colors.white,
+                          color: Colors.blue,
+                          padding: const EdgeInsets.all(15.0),
+                          child: new Text(
+                            "Add",
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.save),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (_) => DuplicateDialog(),
-            );
-          }),
     );
   }
 }
