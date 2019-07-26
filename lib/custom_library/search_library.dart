@@ -24,8 +24,8 @@ class MaterialSearchResult<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: new Row(
+    return Container(
+      child: Row(
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -57,9 +57,7 @@ class MaterialSearch<T> extends StatefulWidget {
     this.limit: 10,
     this.onSelect,
     this.onSubmit,
-    this.barBackgroundColor = Colors.white,
-    this.iconColor = Colors.black,
-    this.leading,
+    this.iconColor = Colors.white,
   })  : assert(() {
           if (results == null && getResults == null ||
               results != null && getResults != null) {
@@ -80,9 +78,8 @@ class MaterialSearch<T> extends StatefulWidget {
   final int limit;
   final ValueChanged<DocumentSnapshot> onSelect;
   final OnSubmit onSubmit;
-  final Color barBackgroundColor;
+
   final Color iconColor;
-  final Widget leading;
 
   @override
   _MaterialSearchState<T> createState() => new _MaterialSearchState<T>();
@@ -188,15 +185,16 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
 
     return new Scaffold(
       appBar: new AppBar(
-        leading: widget.leading,
-        backgroundColor: widget.barBackgroundColor,
         iconTheme: iconTheme,
-        title: new TextField(
+        title: TextField(
+          cursorColor: Colors.white,
           controller: _controller,
           autofocus: true,
-          decoration:
-              new InputDecoration.collapsed(hintText: widget.placeholder),
-          style: Theme.of(context).textTheme.title,
+          decoration: InputDecoration(
+            hintText: widget.placeholder,
+            hintStyle: TextStyle(color: Colors.white54),
+          ),
+          style: TextStyle(color: Colors.white),
           onSubmitted: (String value) {
             if (widget.onSubmit != null) {
               widget.onSubmit(value);
@@ -208,6 +206,7 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
             : [
                 new IconButton(
                     icon: new Icon(Icons.clear),
+                    color: Colors.white,
                     onPressed: () {
                       setState(() {
                         _controller.text = _criteria = '';
@@ -264,17 +263,16 @@ class MaterialSearchInput<T> extends StatefulWidget {
     this.onSelect,
   });
 
-  final FormFieldSetter<T> onSaved;
-  final FormFieldValidator<T> validator;
   final bool autovalidate;
-  final String placeholder;
-  final FormFieldFormatter<T> formatter;
-
-  final List<MaterialSearchResult<T>> results;
-  final MaterialResultsFinder getResults;
   final MaterialSearchFilter<T> filter;
-  final MaterialSearchSort<T> sort;
+  final FormFieldFormatter<T> formatter;
+  final MaterialResultsFinder getResults;
+  final FormFieldSetter<T> onSaved;
   final ValueChanged<T> onSelect;
+  final String placeholder;
+  final List<MaterialSearchResult<T>> results;
+  final MaterialSearchSort<T> sort;
+  final FormFieldValidator<T> validator;
 
   @override
   _MaterialSearchInputState<T> createState() =>
