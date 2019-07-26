@@ -8,6 +8,7 @@ import 'package:recase/recase.dart';
 import 'package:store_stockroom/dialogs/delete_dialog.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
 
+import 'dialogs/delete_dialog.dart';
 import 'dialogs/edit_dialog.dart';
 import 'env.dart';
 import 'themes/helpers/fonts.dart' as ft;
@@ -43,39 +44,42 @@ class _ProductDetailsState extends State<ProductDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Center(
-              child: Container(
-                decoration:
-                    BoxDecoration(color: prefix0.whiteColor, boxShadow: [
-                  BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 2.0,
-                  ),
-                ]),
-                width: double.infinity,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Center(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(widget.document.data['image'],
-                      height: Environment().getHeight(height: 10.0)),
+                  child: Image.network(
+                    widget.document.data['image'],
+                    height: Environment().getHeight(height: 10.0),
+                  ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-              child: Text(
-                ReCase(widget.document.data['name']).titleCase,
-                style: TextStyle(
-                    fontSize: 20.0,
-                    color: blackColor,
-                    fontWeight: FontWeight.bold),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 5.0, left: 10.0),
-              child: Text(
-                widget.document.data['category'].toString().toUpperCase(),
-                style: ft.font15Grey,
-              ),
+            Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      ReCase(widget.document.data['name']).titleCase,
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: blackColor,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      widget.document.data['category'].toString().toUpperCase(),
+                      style: ft.font15Grey,
+                    ),
+                  ],
+                ),
+              ],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
@@ -130,7 +134,8 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Text(ReCase(widget.document.data['description']).sentenceCase),
+              child: Text(
+                  ReCase(widget.document.data['description']).sentenceCase),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),

@@ -130,7 +130,7 @@ class HistoryCardView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Card(
-                elevation: 3.0,
+                elevation: 4.0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -139,16 +139,17 @@ class HistoryCardView extends StatelessWidget {
                       Expanded(
                         flex: 4,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             AutoSizeText(
                               productName,
                               style: TextStyle(fontWeight: FontWeight.bold),
-                              minFontSize: 8.0,
+                              minFontSize: 20.0,
                               maxFontSize: 256.0,
                             ),
                             AutoSizeText(
                               productCategory,
+                              style: TextStyle(color: Colors.grey),
                               minFontSize: 8.0,
                               maxFontSize: 256.0,
                             ),
@@ -159,6 +160,7 @@ class HistoryCardView extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     AutoSizeText(
                                       'Date',

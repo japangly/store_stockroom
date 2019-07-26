@@ -27,10 +27,13 @@ class MaterialSearchResult<T> extends StatelessWidget {
     return new Container(
       child: new Row(
         children: <Widget>[
-          new Container(
-            width: 70.0,
-            child: Image.network(
-              imageSrc,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.network(
+                imageSrc,
+              ),
             ),
           ),
           new Expanded(
