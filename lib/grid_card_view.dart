@@ -10,13 +10,14 @@ import 'database.dart';
 import 'product_details.dart';
 
 class GridCardView extends StatefulWidget {
-  final String selectedSortBy;
-  final bool selectedShownBy;
   const GridCardView({
     Key key,
     @required this.selectedSortBy,
     @required this.selectedShownBy,
   }) : super(key: key);
+
+  final bool selectedShownBy;
+  final String selectedSortBy;
 
   @override
   _GridCardViewState createState() => _GridCardViewState();
@@ -42,6 +43,7 @@ class _GridCardViewState extends State<GridCardView> {
             default:
               return GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 0.62,
                   crossAxisCount: 2,
                 ),
                 itemCount: snapshot.data.documents.length,
@@ -58,36 +60,43 @@ class _GridCardViewState extends State<GridCardView> {
                         padding: const EdgeInsets.all(8.0),
                         child: InkWell(
                           splashColor: Colors.blue.withAlpha(30),
-                          child: Container(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Center(
-                                    child: Container(
-                                      child: Image.network(
-                                        document['image'],
-                                      ),
+                          child: Column(
+                            children: <Widget>[
+                              Flexible(
+                                flex: 2,
+                                child: Center(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      document['image'],
                                     ),
                                   ),
                                 ),
-                                Flexible(
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 12.0),
                                   child: Column(
                                     children: <Widget>[
                                       Flexible(
+                                        flex: 2,
                                         child: AutoSizeText(
-                                          ReCase(document['name']).titleCase,
+                                          ReCase(document.data['name'])
+                                              .titleCase,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
-                                          minFontSize: 8.0,
+                                          minFontSize: 20.0,
                                           maxFontSize: 128.0,
                                         ),
                                       ),
                                       Flexible(
+                                        flex: 2,
                                         child: AutoSizeText(
-                                          document['category'].toString().toUpperCase(),
+                                          document['category']
+                                              .toString()
+                                              .toUpperCase(),
                                           style: TextStyle(
                                             color: Colors.grey,
                                           ),
@@ -95,7 +104,8 @@ class _GridCardViewState extends State<GridCardView> {
                                           maxFontSize: 128.0,
                                         ),
                                       ),
-                                      Expanded(
+                                      Flexible(
+                                        flex: 2,
                                         child: Divider(
                                           color: Colors.grey,
                                         ),
@@ -103,13 +113,15 @@ class _GridCardViewState extends State<GridCardView> {
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: <Widget>[
                                           Flexible(
                                             child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
                                               children: <Widget>[
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Icon(
                                                       Octicons.getIconData(
@@ -151,6 +163,8 @@ class _GridCardViewState extends State<GridCardView> {
                                             child: Column(
                                               children: <Widget>[
                                                 Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   children: <Widget>[
                                                     Icon(
                                                       Octicons.getIconData(
@@ -193,8 +207,8 @@ class _GridCardViewState extends State<GridCardView> {
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           onTap: () {
                             Navigator.push(
