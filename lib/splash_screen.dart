@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:store_stockroom/env.dart';
 import 'package:store_stockroom/log_in_screen.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
+import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 // import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 import 'themes/helpers/splash_screen_plugin.dart';
@@ -17,14 +18,13 @@ class _SplashScreenState extends State<SplashScreen> {
     return SplashScreenStyles(
       seconds: 3,
       navigateAfterSeconds: LoginScreen(),
-      backgroundColor: Colors.blue,
-      photoSize: Environment().getHeight(height: 6.0),
-      // image: Image.asset('assets/images/icon_salon.png'),
+      imageBackground: AssetImage('assets/images/splash_screen.jpg'),
       title: Text(
-        'Mickey &Honey',
-        style: font30White,
+        'Mickey & Honey',
+        style: TextStyle(
+            fontFamily: 'Realistica', color: whiteColor, fontSize: 40),
       ),
-      loaderColor: Colors.blue,
+      loaderColor: Colors.transparent,
     );
   }
 }

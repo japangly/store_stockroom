@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:intl/intl.dart';
+import 'package:recase/recase.dart';
 
 import 'database.dart';
 import 'themes/helpers/theme_colors.dart';
@@ -148,7 +149,7 @@ class HistoryCardView extends StatelessWidget {
                               maxFontSize: 256.0,
                             ),
                             AutoSizeText(
-                              productCategory,
+                              ReCase(productCategory).sentenceCase,
                               style: TextStyle(color: Colors.grey),
                               minFontSize: 8.0,
                               maxFontSize: 256.0,

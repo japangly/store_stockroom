@@ -78,6 +78,11 @@ class _SplashScreenStylesState extends State<SplashScreenStyles> {
                 color: widget.backgroundColor,
               ),
             ),
+            new Container(
+              decoration: new BoxDecoration(
+                color: Colors.blue.withOpacity(0.6),
+              ),
+            ),
             new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -86,33 +91,8 @@ class _SplashScreenStylesState extends State<SplashScreenStyles> {
                   child: new Container(
                       child: new Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new CircleAvatar(
-                        backgroundColor: Colors.transparent,
-                        child: new Container(child: widget.image),
-                        radius: widget.photoSize,
-                      ),
-                      new Padding(
-                        padding: const EdgeInsets.only(top: 10.0),
-                      ),
-                      widget.title
-                    ],
+                    children: <Widget>[widget.title],
                   )),
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SpinKitThreeBounce(
-                        color: widget.loaderColor,
-                        size: 50.0,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20.0),
-                      ),
-                      widget.loadingText
-                    ],
-                  ),
                 ),
               ],
             ),
