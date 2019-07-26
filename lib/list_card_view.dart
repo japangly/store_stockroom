@@ -48,8 +48,9 @@ class _ListCardViewState extends State<ListCardView> {
                         Navigator.push(
                           context,
                           PageTransition(
-                              child: ProductDetails(),
-                              type: PageTransitionType.rightToLeftWithFade),
+                            child: ProductDetails(document: document,),
+                            type: PageTransitionType.rightToLeftWithFade,
+                          ),
                         );
                       },
                       child: Card(

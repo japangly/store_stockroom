@@ -72,8 +72,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       context,
                       PageTransition(
                           child: ProductDetails(
-                              documentId: value.documentID,
-                              document: value),
+                            document: value,
+                          ),
                           type: PageTransitionType.rightToLeftWithFade),
                     ),
                     onSubmit: (String value) =>
