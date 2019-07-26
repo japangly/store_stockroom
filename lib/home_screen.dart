@@ -5,12 +5,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_search/material_search.dart';
+// import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:store_stockroom/database.dart';
 import 'package:store_stockroom/print.dart';
 
 import 'add_product.dart';
+import 'custom_library/search_library.dart';
 import 'history.dart';
 import 'inventory_screen.dart';
 import 'product_details.dart';
@@ -63,19 +64,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         .map((DocumentSnapshot v) =>
                             MaterialSearchResult<String>(
                               // icon: Icons.person,
-                              value: v.documentID,
+                              value: v,
                               text: v.data['name'],
                             ))
                         .toList(),
-                    filter: (dynamic value, String criteria) {
-                      return value.toLowerCase().trim().contains(
+                    filter: (DocumentSnapshot value, String criteria) {
+                      return value.data['name'].toLowerCase().trim().contains(
                           RegExp(r'' + criteria.toLowerCase().trim() + ''));
                     },
-                    onSelect: (dynamic value) => Navigator.push(
+                    onSelect: (DocumentSnapshot value) => Navigator.push(
                       context,
                       PageTransition(
                           child: ProductDetails(
-                              documentId: value, documents: documents),
+                              documentId: value.documentID,
+                              document: value),
                           type: PageTransitionType.rightToLeftWithFade),
                     ),
                     onSubmit: (String value) =>
@@ -135,7 +137,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       collection: 'products', sortBy: 'name', order: true);
                   for (int i = 0; i < documents.length; i++) {
                     _names.add(documents[i].data['name']);
-                    documents[i].documentID;
                   }
                   _showMaterialSearch(context);
                 } catch (e) {
