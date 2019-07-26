@@ -3,12 +3,12 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:store_stockroom/themes/helpers/fonts.dart';
 
-class AddCategory extends StatefulWidget {
+class CreateCategory extends StatefulWidget {
   @override
-  _AddCategoryState createState() => _AddCategoryState();
+  _CreateCategoryState createState() => _CreateCategoryState();
 }
 
-class _AddCategoryState extends State<AddCategory> {
+class _CreateCategoryState extends State<CreateCategory> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,14 +20,18 @@ class _AddCategoryState extends State<AddCategory> {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
-                  'Add Category',
+                  'Create New Category',
                   style: font20White,
                 ),
               ),
             ],
           ),
         ),
-        body: Container(
+        body: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          behavior: HitTestBehavior.translucent,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -73,7 +77,7 @@ class _AddCategoryState extends State<AddCategory> {
                             color: Colors.blue,
                             padding: const EdgeInsets.all(15.0),
                             child: new Text(
-                              "Add",
+                              "Create",
                             ),
                             onPressed: () {},
                           ),
