@@ -87,4 +87,17 @@ class Database {
       return null;
     }
   }
+   Stream<QuerySnapshot> getProducts({
+    @required String collection,
+    @required String orderBy,
+  }) {
+    return Firestore.instance
+        .collection(collection)
+        .orderBy(
+          orderBy,
+          descending: true,
+        )
+        .snapshots();
+  }
+  
 }

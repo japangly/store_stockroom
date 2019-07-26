@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -7,6 +8,9 @@ import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
 class DeleteDialog extends StatelessWidget {
+  String documentId;
+  DocumentSnapshot document;
+  DeleteDialog({this.documentId, this.document, Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
