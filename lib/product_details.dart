@@ -134,8 +134,9 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Text(
-                  ReCase(widget.document.data['description']).sentenceCase),
+              child: Text(widget.document['description'] == ''
+                  ? ReCase('no description provided').sentenceCase
+                  : ReCase(widget.document.data['description']).sentenceCase),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
