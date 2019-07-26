@@ -1,16 +1,26 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
+import 'package:intl/intl.dart';
 import 'package:store_stockroom/dialogs/delete_dialog.dart';
-import 'package:store_stockroom/dialogs/edit_dialog.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
+
+import 'dialogs/edit_dialog.dart';
 import 'env.dart';
 import 'themes/helpers/fonts.dart' as ft;
 import 'themes/helpers/theme_colors.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetails extends StatefulWidget {
+  final DocumentSnapshot document;
+  ProductDetails({Key key, @required this.document}) : super(key: key);
+
+  @override
+  _ProductDetailsState createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +45,8 @@ class ProductDetails extends StatelessWidget {
             Center(
               child: Container(
                 decoration:
-                    new BoxDecoration(color: prefix0.whiteColor, boxShadow: [
-                  new BoxShadow(
+                    BoxDecoration(color: prefix0.whiteColor, boxShadow: [
+                  BoxShadow(
                     color: Colors.black,
                     blurRadius: 2.0,
                   ),
@@ -44,17 +54,15 @@ class ProductDetails extends StatelessWidget {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: Image.network(
-                    'https://www.natio.com.au/pub/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/h/a/haircare_2019_product_web_images_dc_shampoo.jpg',
-                    height: Environment().getHeight(height: 10.0),
-                  ),
+                  child: Image.network(widget.document.data['image'],
+                      height: Environment().getHeight(height: 10.0)),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
-                'Sunsilk Hair Fall Control',
+                widget.document.data['name'],
                 style: TextStyle(
                     fontSize: 20.0,
                     color: blackColor,
@@ -64,7 +72,7 @@ class ProductDetails extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 5.0, left: 10.0),
               child: Text(
-                'Shampoo',
+                widget.document.data['category'],
                 style: ft.font15Grey,
               ),
             ),
@@ -80,7 +88,7 @@ class ProductDetails extends StatelessWidget {
                         color: Colors.green[500],
                       ),
                       Text(
-                        'In Stock: 500',
+                        'In Stock: ${widget.document.data['inStock'].toString()}',
                         style: TextStyle(
                           color: Colors.green[500],
                           fontWeight: FontWeight.bold,
@@ -95,7 +103,7 @@ class ProductDetails extends StatelessWidget {
                         color: Colors.orange[500],
                       ),
                       Text(
-                        'In Use: 10',
+                        'In Use: ${widget.document.data['inUse'].toString()}',
                         style: TextStyle(
                           color: Colors.orange[500],
                           fontWeight: FontWeight.bold,
@@ -121,8 +129,7 @@ class ProductDetails extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Text(
-                  'Whipped Crème & Honey™ Volumizing Shampoo strengthens hair as it works to pump up each individual strand, adding body and bounce. It’s an ideal shampoo for finer hair textures. Lather this volumizing shampoo into hair daily and rinse thoroughly. Leaves hair as sweet as can be.\nFollow with any SUDZZfx® conditioner.adds volume & body – great for fine hair\npH 4.5 – 5.5'),
+              child: Text(widget.document.data['description']),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
@@ -132,7 +139,13 @@ class ProductDetails extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        'Created at: 20/03/2019',
+                        'Created at: ' +
+                            // 'Created at: 20/03/2019',
+                            DateFormat("d MMM y")
+                                .format(
+                                    widget.document.data['createdAt'].toDate())
+                                .toString() +
+                            '',
                         style: TextStyle(color: Colors.blue[500]),
                       ),
                     ],
@@ -140,7 +153,12 @@ class ProductDetails extends StatelessWidget {
                   Row(
                     children: <Widget>[
                       Text(
-                        'Updated at: 20/09/2019',
+                        'Updated at: ' +
+                            DateFormat("d MMM y")
+                                .format(
+                                    widget.document.data['updatedAt'].toDate())
+                                .toString() +
+                            '',
                         style: TextStyle(color: Colors.green[500]),
                       ),
                     ],
@@ -159,12 +177,14 @@ class ProductDetails extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               textColor: Colors.white,
               color: removeColor,
-              child: new Text("Delete"),
+              child: Text("Delete"),
               onPressed: () {
                 showDialog(
                     context: context,
                     builder: (_) {
-                      return DeleteDialog();
+                      return DeleteDialog(
+                        documentId: widget.document.documentID,
+                      );
                     });
               },
             ),
@@ -175,14 +195,16 @@ class ProductDetails extends StatelessWidget {
               textColor: Colors.white,
               color: Colors.blue,
               padding: const EdgeInsets.all(15.0),
-              child: new Text(
+              child: Text(
                 "Edit",
               ),
               onPressed: () {
                 showDialog(
                     context: context,
                     builder: (_) {
-                      return EditDialog();
+                      return EditDialog(
+                        documentId: widget.document.documentID,
+                      );
                     });
               },
             ),

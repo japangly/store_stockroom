@@ -1,16 +1,16 @@
-import 'dart:io';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:store_stockroom/print.dart';
 
-import 'add_product.dart';
-import 'history.dart';
-import 'inventory_screen.dart';
+import 'create_product.dart';
+import 'custom_library/search_library.dart';
+import 'dashboard_screen.dart';
+import 'database.dart';
+import 'history_screen.dart';
+import 'print.dart';
 import 'product_details.dart';
 import 'user_profile.dart';
 
@@ -28,26 +28,16 @@ class HomeScreen extends StatefulWidget {
 
 int _selectedIndex = 0;
 List<Widget> _widgetOptions = <Widget>[
-  InventoryScreen(),
+  DashboardScreen(),
   Center(
-    child: Text('Coming Soon Brader... :)'),
+    child: Text('Coming Soon!'),
   ),
   HistoryScreen(),
 ];
-List<String> _names = [
-  'Igor Minar',
-  'Brad Green',
-  'Dave Geddes',
-  'Naomi Black',
-  'Greg Weber',
-  'Dean Sofer',
-  'Wes Alvaro',
-  'John Scott',
-  'Daniel Nadasi',
-];
+List<String> _names = [];
+List<DocumentSnapshot> documents;
 
 class _HomeScreenState extends State<HomeScreen> {
-  File imageFile;
   String name = 'No one';
 
   _buildMaterialSearchPage(BuildContext context) {
@@ -57,31 +47,40 @@ class _HomeScreenState extends State<HomeScreen> {
           isInitialRoute: false,
         ),
         builder: (BuildContext context) {
-          return Material(
-            child: MaterialSearch<String>(
-              placeholder: 'Search',
-              results: _names
-                  .map((String v) => MaterialSearchResult<String>(
-                        icon: Icons.person,
-                        value: v,
-                        text: "Mr(s). $v",
-                      ))
-                  .toList(),
-              filter: (dynamic value, String criteria) {
-                return value
-                    .toLowerCase()
-                    .trim()
-                    .contains(RegExp(r'' + criteria.toLowerCase().trim() + ''));
-              },
-              onSelect: (dynamic value) => Navigator.push(
-                    context,
-                    PageTransition(
-                        child: ProductDetails(),
-                        type: PageTransitionType.rightToLeftWithFade),
+          return StreamBuilder<QuerySnapshot>(
+              stream: Database().getProducts(
+                collection: 'products',
+                orderBy: 'name',
+              ),
+              builder: (context, snapshot) {
+                return Material(
+                  child: MaterialSearch<String>(
+                    placeholder: 'Search',
+                    results: documents
+                        .map((DocumentSnapshot v) =>
+                            MaterialSearchResult<String>(
+                              // icon: Icons.person,
+                              value: v,
+                              text: v.data['name'],
+                            ))
+                        .toList(),
+                    filter: (DocumentSnapshot value, String criteria) {
+                      return value.data['name'].toLowerCase().trim().contains(
+                          RegExp(r'' + criteria.toLowerCase().trim() + ''));
+                    },
+                    onSelect: (DocumentSnapshot value) => Navigator.push(
+                      context,
+                      PageTransition(
+                          child: ProductDetails(
+                            document: value,
+                          ),
+                          type: PageTransitionType.rightToLeftWithFade),
+                    ),
+                    onSubmit: (String value) =>
+                        Navigator.of(context).pop(value),
                   ),
-              onSubmit: (String value) => Navigator.of(context).pop(value),
-            ),
-          );
+                );
+              });
         });
   }
 
@@ -97,6 +96,57 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  dynamic _bottomButtons() {
+    switch (_selectedIndex) {
+      case 0:
+        return FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await ImagePicker.pickImage(source: ImageSource.camera).then(
+              (imageFile) async {
+                await ImageCropper.cropImage(
+                  sourcePath: imageFile.path,
+                  toolbarTitle: 'Edit Photo',
+                  toolbarColor: Colors.blue,
+                  toolbarWidgetColor: Colors.white,
+                  ratioX: 1.0,
+                  ratioY: 1.0,
+                  maxWidth: 512,
+                  maxHeight: 512,
+                ).then((imageFile) {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      child: CreateProduct(
+                        imageFile: imageFile,
+                      ),
+                      type: PageTransitionType.downToUp,
+                    ),
+                  );
+                });
+              },
+            );
+          },
+        );
+        break;
+      case 2:
+        return FloatingActionButton(
+          child: Icon(Icons.print),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return PrintScreen();
+                },
+              ),
+            );
+          },
+        );
+        break;
+    }
   }
 
   @override
@@ -127,8 +177,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.search,
                 color: Colors.white,
               ),
-              onPressed: () {
-                _showMaterialSearch(context);
+              onPressed: () async {
+                _names = [];
+                try {
+                  documents = await Database().getAllCollection(
+                      collection: 'products', sortBy: 'name', order: true);
+                  for (int i = 0; i < documents.length; i++) {
+                    _names.add(documents[i].data['name']);
+                  }
+                  _showMaterialSearch(context);
+                } catch (e) {
+                  print(e);
+                }
               },
             )
           ],
@@ -138,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
-              title: Text('Inventory'),
+              title: Text('Products'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.spellcheck),
@@ -154,57 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: _onTappedView,
         ),
         floatingActionButton: _bottomButtons());
-  }
-
-  Widget _bottomButtons() {
-    switch (_selectedIndex) {
-      case 0:
-        return FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            await ImagePicker.pickImage(source: ImageSource.camera).then(
-              (file) async {
-                imageFile = await ImageCropper.cropImage(
-                  sourcePath: file.path,
-                  toolbarTitle: 'Edit Image',
-                  toolbarColor: Colors.blue,
-                  toolbarWidgetColor: Colors.white,
-                  ratioX: 1.0,
-                  ratioY: 1.0,
-                  maxWidth: 512,
-                  maxHeight: 512,
-                );
-              },
-            ).whenComplete(
-              () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    child: AddProduct(),
-                    type: PageTransitionType.downToUp,
-                  ),
-                );
-              },
-            );
-          },
-        );
-        break;
-      case 2:
-        return FloatingActionButton(
-          child: Icon(Icons.print),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return PrintScreen();
-                },
-              ),
-            );
-          },
-        );
-        break;
-    }
   }
 }
 

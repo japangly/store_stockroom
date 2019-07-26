@@ -6,6 +6,7 @@
         "Schyler",
         "barcode",
         "datetime",
-        "firestore"
+        "firestore",
+        "spinkit"
     ]
 }

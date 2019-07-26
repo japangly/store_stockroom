@@ -2,6 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 class Database {
+  Stream<QuerySnapshot> getStreamCollection({
+    @required String collection,
+    @required String orderBy,
+    @required bool isDescending,
+  }) {
+    return Firestore.instance
+        .collection(collection)
+        .orderBy(
+          orderBy,
+          descending: isDescending,
+        )
+        .snapshots();
+  }
+
   Future<DocumentSnapshot> getCurrentUserInfo({@required String userId}) async {
     QuerySnapshot querySnapshot = await Firestore.instance
         .collection('employees')
@@ -87,4 +101,17 @@ class Database {
       return null;
     }
   }
+   Stream<QuerySnapshot> getProducts({
+    @required String collection,
+    @required String orderBy,
+  }) {
+    return Firestore.instance
+        .collection(collection)
+        .orderBy(
+          orderBy,
+          descending: true,
+        )
+        .snapshots();
+  }
+  
 }
