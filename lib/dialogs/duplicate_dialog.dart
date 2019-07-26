@@ -26,7 +26,7 @@ class DuplicateDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Duplicate Input!",
+                      'Duplicate Input!',
                       style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
                     ),
                   ),

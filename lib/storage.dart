@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_native_image/flutter_native_image.dart';
 
 class Storage {
-  Future<bool> uploadFile({
+  Future<String> uploadFile({
     @required String collection,
     @required File file,
     @required String fileName,
@@ -17,7 +17,7 @@ class Storage {
 
     StorageUploadTask uploadTask = reference.putFile(compressedFile);
     StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
-    return downloadUrl.ref.getDownloadURL().toString().isNotEmpty;
+    return await downloadUrl.ref.getDownloadURL();
   }
 
   Future getFileUrl({
