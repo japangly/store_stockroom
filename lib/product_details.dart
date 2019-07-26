@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
 import 'package:intl/intl.dart';
+import 'package:recase/recase.dart';
 import 'package:store_stockroom/dialogs/delete_dialog.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
 
@@ -62,7 +63,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
-                widget.document.data['name'],
+                ReCase(widget.document.data['name']).titleCase,
                 style: TextStyle(
                     fontSize: 20.0,
                     color: blackColor,
@@ -72,7 +73,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Padding(
               padding: const EdgeInsets.only(top: 5.0, left: 10.0),
               child: Text(
-                widget.document.data['category'],
+                widget.document.data['category'].toString().toUpperCase(),
                 style: ft.font15Grey,
               ),
             ),
@@ -84,7 +85,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: <Widget>[
                       Icon(
-                        Octicons.getIconData("primitive-dot"),
+                        Octicons.getIconData('primitive-dot'),
                         color: Colors.green[500],
                       ),
                       Text(
@@ -99,7 +100,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: <Widget>[
                       Icon(
-                        Octicons.getIconData("primitive-dot"),
+                        Octicons.getIconData('primitive-dot'),
                         color: Colors.orange[500],
                       ),
                       Text(
@@ -129,7 +130,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Text(widget.document.data['description']),
+              child: Text(ReCase(widget.document.data['description']).sentenceCase),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
@@ -139,9 +140,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: <Widget>[
                       Text(
-                        'Created at: ' +
+                        'Created At: ' +
                             // 'Created at: 20/03/2019',
-                            DateFormat("d MMM y")
+                            DateFormat('d MMM y')
                                 .format(
                                     widget.document.data['createdAt'].toDate())
                                 .toString() +
@@ -153,8 +154,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     children: <Widget>[
                       Text(
-                        'Updated at: ' +
-                            DateFormat("d MMM y")
+                        'Updated At: ' +
+                            DateFormat('d MMM y')
                                 .format(
                                     widget.document.data['updatedAt'].toDate())
                                 .toString() +
@@ -196,7 +197,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               color: Colors.blue,
               padding: const EdgeInsets.all(15.0),
               child: Text(
-                "Edit",
+                'Edit',
               ),
               onPressed: () {
                 showDialog(

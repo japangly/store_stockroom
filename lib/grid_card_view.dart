@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/octicons.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:recase/recase.dart';
 
 import 'database.dart';
 import 'product_details.dart';
@@ -76,7 +77,7 @@ class _GridCardViewState extends State<GridCardView> {
                                     children: <Widget>[
                                       Flexible(
                                         child: AutoSizeText(
-                                          document['name'],
+                                          ReCase(document['name']).titleCase,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -86,7 +87,7 @@ class _GridCardViewState extends State<GridCardView> {
                                       ),
                                       Flexible(
                                         child: AutoSizeText(
-                                          document['category'],
+                                          document['category'].toString().toUpperCase(),
                                           style: TextStyle(
                                             color: Colors.grey,
                                           ),
