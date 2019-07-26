@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/octicons.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:recase/recase.dart';
 
 import 'database.dart';
 import 'env.dart';
@@ -48,7 +49,9 @@ class _ListCardViewState extends State<ListCardView> {
                         Navigator.push(
                           context,
                           PageTransition(
-                            child: ProductDetails(document: document,),
+                            child: ProductDetails(
+                              document: document,
+                            ),
                             type: PageTransitionType.rightToLeftWithFade,
                           ),
                         );
@@ -76,7 +79,7 @@ class _ListCardViewState extends State<ListCardView> {
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
                                         AutoSizeText(
-                                          document['name'],
+                                          ReCase(document['name']).titleCase,
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
@@ -84,7 +87,9 @@ class _ListCardViewState extends State<ListCardView> {
                                           maxFontSize: 128.0,
                                         ),
                                         AutoSizeText(
-                                          document['category'],
+                                          document['category']
+                                              .toString()
+                                              .toUpperCase(),
                                           style: TextStyle(color: Colors.grey),
                                           minFontSize: 18.0,
                                           maxFontSize: 128.0,

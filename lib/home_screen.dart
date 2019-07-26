@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:recase/recase.dart';
 
 import 'create_product.dart';
 import 'custom_library/search_library.dart';
@@ -59,9 +60,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     results: documents
                         .map((DocumentSnapshot v) =>
                             MaterialSearchResult<String>(
-                              // icon: Icons.person,
+                              imageSrc: v.data['image'],
                               value: v,
-                              text: v.data['name'],
+                              text: ReCase(v.data['name']).titleCase,
                             ))
                         .toList(),
                     filter: (DocumentSnapshot value, String criteria) {
@@ -181,9 +182,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 _names = [];
                 try {
                   documents = await Database().getAllCollection(
-                      collection: 'products', sortBy: 'name', order: true);
+                    collection: 'products',
+                    sortBy: 'name',
+                    order: false,
+                  );
                   for (int i = 0; i < documents.length; i++) {
-                    _names.add(documents[i].data['name']);
+                    _names.add(
+                      documents[i].data['name'],
+                    );
                   }
                   _showMaterialSearch(context);
                 } catch (e) {

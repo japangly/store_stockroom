@@ -227,9 +227,6 @@ class _CreateProductState extends State<CreateProduct> {
                         ],
                       ),
                     ),
-                    SizedBox(
-                      height: 64.0,
-                    )
                   ],
                 ),
               ),
