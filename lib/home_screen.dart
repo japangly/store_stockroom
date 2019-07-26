@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,12 +5,12 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:material_search/material_search.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:store_stockroom/database.dart';
-import 'package:store_stockroom/print.dart';
 
-import 'add_product.dart';
-import 'history.dart';
-import 'inventory_screen.dart';
+import 'create_product.dart';
+import 'dashboard_screen.dart';
+import 'database.dart';
+import 'history_screen.dart';
+import 'print.dart';
 import 'product_details.dart';
 import 'user_profile.dart';
 
@@ -30,9 +28,9 @@ class HomeScreen extends StatefulWidget {
 
 int _selectedIndex = 0;
 List<Widget> _widgetOptions = <Widget>[
-  InventoryScreen(),
+  DashboardScreen(),
   Center(
-    child: Text('Coming Soon Brader... :)'),
+    child: Text('Coming Soon!'),
   ),
   HistoryScreen(),
 ];
@@ -40,7 +38,6 @@ List<String> _names = [];
 List<DocumentSnapshot> documents;
 
 class _HomeScreenState extends State<HomeScreen> {
-  File imageFile;
   String name = 'No one';
 
   _buildMaterialSearchPage(BuildContext context) {
@@ -100,6 +97,57 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  dynamic _bottomButtons() {
+    switch (_selectedIndex) {
+      case 0:
+        return FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () async {
+            await ImagePicker.pickImage(source: ImageSource.camera).then(
+              (imageFile) async {
+                await ImageCropper.cropImage(
+                  sourcePath: imageFile.path,
+                  toolbarTitle: 'Edit Photo',
+                  toolbarColor: Colors.blue,
+                  toolbarWidgetColor: Colors.white,
+                  ratioX: 1.0,
+                  ratioY: 1.0,
+                  maxWidth: 512,
+                  maxHeight: 512,
+                ).then((imageFile) {
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      child: CreateProduct(
+                        imageFile: imageFile,
+                      ),
+                      type: PageTransitionType.downToUp,
+                    ),
+                  );
+                });
+              },
+            );
+          },
+        );
+        break;
+      case 2:
+        return FloatingActionButton(
+          child: Icon(Icons.print),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return PrintScreen();
+                },
+              ),
+            );
+          },
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +198,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(Icons.dashboard),
-              title: Text('Inventory'),
+              title: Text('Products'),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.spellcheck),
@@ -166,57 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
           onTap: _onTappedView,
         ),
         floatingActionButton: _bottomButtons());
-  }
-
-  Widget _bottomButtons() {
-    switch (_selectedIndex) {
-      case 0:
-        return FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () async {
-            await ImagePicker.pickImage(source: ImageSource.camera).then(
-              (file) async {
-                imageFile = await ImageCropper.cropImage(
-                  sourcePath: file.path,
-                  toolbarTitle: 'Edit Image',
-                  toolbarColor: Colors.blue,
-                  toolbarWidgetColor: Colors.white,
-                  ratioX: 1.0,
-                  ratioY: 1.0,
-                  maxWidth: 512,
-                  maxHeight: 512,
-                );
-              },
-            ).whenComplete(
-              () {
-                Navigator.push(
-                  context,
-                  PageTransition(
-                    child: AddProduct(),
-                    type: PageTransitionType.downToUp,
-                  ),
-                );
-              },
-            );
-          },
-        );
-        break;
-      case 2:
-        return FloatingActionButton(
-          child: Icon(Icons.print),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (BuildContext context) {
-                  return PrintScreen();
-                },
-              ),
-            );
-          },
-        );
-        break;
-    }
   }
 }
 

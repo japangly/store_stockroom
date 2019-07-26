@@ -1,34 +1,26 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
+import 'package:intl/intl.dart';
 
+import 'database.dart';
 import 'themes/helpers/theme_colors.dart';
 
-int _listIndex = 0;
-Icon defaultIcon = Icon(Icons.add, color: Colors.white);
-Color defaultColor = confirmColor;
-String defaultString = 'Added';
 List<Icon> listIcon = [
-  Icon(
-    Icons.add,
-    color: Colors.white,
-  ),
   Icon(
     Icons.remove,
     color: Colors.white,
   ),
+  Icon(
+    Icons.add,
+    color: Colors.white,
+  ),
 ];
 List<Color> listColor = [
-  confirmColor,
   removeColor,
-];
-List<String> listString = [
-  'Added',
-  'Deleted',
-  'Deleted',
-  'Added',
-  'Added',
+  confirmColor,
 ];
 
 class HistoryScreen extends StatefulWidget {
@@ -41,42 +33,61 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text('Select Date:'),
-                  IconButton(
-                    icon: Icon(SimpleLineIcons.getIconData("calendar")),
-                    onPressed: () {
-                      DatePicker.showDatePicker(context,
-                          showTitleActions: true,
-                          minTime: DateTime(2019, 1, 1), onChanged: (date) {
-                        print('change $date');
-                      }, onConfirm: (date) {
-                        print('confirm $date');
-                      }, currentTime: DateTime.now(), locale: LocaleType.en);
+              Text('Select Date:'),
+              IconButton(
+                icon: Icon(SimpleLineIcons.getIconData('calendar')),
+                onPressed: () {
+                  DatePicker.showDatePicker(
+                    context,
+                    showTitleActions: true,
+                    minTime: DateTime(2019, 1, 1),
+                    onConfirm: (date) {
+                      print('confirm $date');
                     },
-                  ),
-                ],
+                    currentTime: DateTime.now(),
+                    locale: LocaleType.en,
+                  );
+                },
               ),
             ],
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 5,
-              itemBuilder: (BuildContext context, int index) {
-                defaultString = listString[index];
-                defaultString == 'Added'
-                    ? defaultColor = listColor[0]
-                    : defaultColor = listColor[1];
-
-                defaultString == 'Added'
-                    ? defaultIcon = listIcon[0]
-                    : defaultIcon = listIcon[1];
-                return HistoryCardView();
+            child: StreamBuilder<QuerySnapshot>(
+              stream: Database().getStreamCollection(
+                collection: 'product_history',
+                orderBy: 'date',
+                isDescending: true,
+              ),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (snapshot.hasError) return Text('Error: ${snapshot.error}');
+                switch (snapshot.connectionState) {
+                  case ConnectionState.waiting:
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  default:
+                    return ListView(
+                      children: snapshot.data.documents
+                          .map((DocumentSnapshot document) {
+                        return HistoryCardView(
+                          productName: document['productName'],
+                          productCategory: document['productCategory'],
+                          employeeLastName: document['employeeLastName'],
+                          employeeFirstName: document['employeeFirstName'],
+                          action: document['action'],
+                          date: document['date'],
+                        );
+                      }).toList(),
+                    );
+                }
               },
             ),
           )
@@ -89,7 +100,25 @@ class _HistoryScreenState extends State<HistoryScreen> {
 class HistoryCardView extends StatelessWidget {
   const HistoryCardView({
     Key key,
+    @required this.productName,
+    @required this.productCategory,
+    @required this.employeeFirstName,
+    @required this.employeeLastName,
+    @required this.action,
+    @required this.date,
   }) : super(key: key);
+
+  final String action;
+  final Timestamp date;
+  final String employeeFirstName;
+  final String employeeLastName;
+  final String productCategory;
+  final String productName;
+
+  bool equalsIgnoreCase(String a, String b) {
+    return (a == null && b == null) ||
+        (a != null && b != null && a.toLowerCase() == b.toLowerCase());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -113,13 +142,13 @@ class HistoryCardView extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             AutoSizeText(
-                              'Head & Shoulder',
+                              productName,
                               style: TextStyle(fontWeight: FontWeight.bold),
                               minFontSize: 8.0,
                               maxFontSize: 256.0,
                             ),
                             AutoSizeText(
-                              'Shampoo',
+                              productCategory,
                               minFontSize: 8.0,
                               maxFontSize: 256.0,
                             ),
@@ -132,7 +161,7 @@ class HistoryCardView extends StatelessWidget {
                                 Column(
                                   children: <Widget>[
                                     AutoSizeText(
-                                      'Just now',
+                                      'Date',
                                       minFontSize: 8.0,
                                       maxFontSize: 128.0,
                                       style: TextStyle(color: Colors.grey),
@@ -140,8 +169,8 @@ class HistoryCardView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: AutoSizeText(
-                                        '12/12/2019',
-                                        style: TextStyle(),
+                                        DateFormat('yMMMMd')
+                                            .format(date.toDate()),
                                         minFontSize: 8.0,
                                         maxFontSize: 128.0,
                                       ),
@@ -161,7 +190,8 @@ class HistoryCardView extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: AutoSizeText(
-                                            'Bunseng',
+                                            employeeLastName +
+                                                employeeFirstName,
                                             style: TextStyle(),
                                             minFontSize: 8.0,
                                             maxFontSize: 128.0,
@@ -182,7 +212,7 @@ class HistoryCardView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: AutoSizeText(
-                                        defaultString,
+                                        action,
                                         style: TextStyle(),
                                         minFontSize: 8.0,
                                         maxFontSize: 128.0,
@@ -212,12 +242,17 @@ class HistoryCardView extends StatelessWidget {
               width: 35.0,
               child: Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                  Radius.circular(128.0),
-                )),
-                color: defaultColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(128.0),
+                  ),
+                ),
+                color: equalsIgnoreCase(action, 'added')
+                    ? listColor.elementAt(1)
+                    : listColor.elementAt(0),
                 elevation: 6.0,
-                child: defaultIcon,
+                child: equalsIgnoreCase(action, 'added')
+                    ? listIcon.elementAt(1)
+                    : listIcon.elementAt(0),
               ),
             ),
           ],

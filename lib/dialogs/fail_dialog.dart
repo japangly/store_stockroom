@@ -34,7 +34,7 @@ class FailDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
-                      'Please check your input again.',
+                      'Please check your inputs again.',
                       style: font15Grey,
                       textAlign: TextAlign.center,
                     ),

@@ -11,3 +11,5 @@ offline.mode=false
 override.workspace.settings=true
 show.console.view=true
 show.executions.view=true
+connection.project.dir=
+eclipse.preferences.version=1
