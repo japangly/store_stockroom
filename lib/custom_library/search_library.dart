@@ -134,7 +134,6 @@ class _MaterialSearchState<T> extends State<MaterialSearch> {
         _loading = true;
       });
 
-      //TODO: debounce widget.results too
       var results = await widget.getResults(_criteria);
 
       if (!mounted) {

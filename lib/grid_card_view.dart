@@ -199,7 +199,9 @@ class _GridCardViewState extends State<GridCardView> {
                             Navigator.push(
                               context,
                               PageTransition(
-                                  child: ProductDetails(),
+                                  child: ProductDetails(
+                                    document: document,
+                                  ),
                                   type: PageTransitionType.rightToLeftWithFade),
                             );
                           },

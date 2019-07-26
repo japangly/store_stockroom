@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 import 'env.dart';
 import 'home_screen.dart';
+import 'themes/helpers/theme_colors.dart';
 
 class LoginScreen extends StatefulWidget {
   @override

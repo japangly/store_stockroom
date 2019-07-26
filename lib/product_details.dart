@@ -3,20 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
+import 'package:intl/intl.dart';
 import 'package:store_stockroom/dialogs/delete_dialog.dart';
-import 'package:store_stockroom/dialogs/edit_dialog.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
+
+import 'dialogs/edit_dialog.dart';
 import 'env.dart';
 import 'themes/helpers/fonts.dart' as ft;
 import 'themes/helpers/theme_colors.dart';
 
-import 'package:intl/intl.dart';
-
 class ProductDetails extends StatefulWidget {
-  final String documentId;
   final DocumentSnapshot document;
-  ProductDetails({Key key, this.documentId, this.document}) : super(key: key);
+  ProductDetails({Key key, @required this.document}) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
@@ -47,8 +45,8 @@ class _ProductDetailsState extends State<ProductDetails> {
             Center(
               child: Container(
                 decoration:
-                    new BoxDecoration(color: prefix0.whiteColor, boxShadow: [
-                  new BoxShadow(
+                    BoxDecoration(color: prefix0.whiteColor, boxShadow: [
+                  BoxShadow(
                     color: Colors.black,
                     blurRadius: 2.0,
                   ),
@@ -56,12 +54,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  child: widget.document.data['image'] == ''
-                      ? Image.network(
-                          'https://www.designyourway.net/diverse/5/logininsp/2539365.jpg',
-                          height: Environment().getHeight(height: 10.0))
-                      : Image.network(widget.document.data['image'],
-                          height: Environment().getHeight(height: 10.0)),
+                  child: Image.network(widget.document.data['image'],
+                      height: Environment().getHeight(height: 10.0)),
                 ),
               ),
             ),
@@ -183,14 +177,13 @@ class _ProductDetailsState extends State<ProductDetails> {
               padding: const EdgeInsets.all(15.0),
               textColor: Colors.white,
               color: removeColor,
-              child: new Text("Delete"),
+              child: Text("Delete"),
               onPressed: () {
                 showDialog(
                     context: context,
                     builder: (_) {
                       return DeleteDialog(
-                        documentId: widget.documentId,
-                        document: widget.document,
+                        documentId: widget.document.documentID,
                       );
                     });
               },
@@ -202,7 +195,7 @@ class _ProductDetailsState extends State<ProductDetails> {
               textColor: Colors.white,
               color: Colors.blue,
               padding: const EdgeInsets.all(15.0),
-              child: new Text(
+              child: Text(
                 "Edit",
               ),
               onPressed: () {
@@ -210,8 +203,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     context: context,
                     builder: (_) {
                       return EditDialog(
-                        documentId: widget.documentId,
-                        document: widget.document,
+                        documentId: widget.document.documentID,
                       );
                     });
               },
