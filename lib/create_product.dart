@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 
+import 'create_category.dart';
 import 'database.dart';
 import 'env.dart';
 import 'storage.dart';
@@ -68,7 +69,16 @@ class _CreateProductState extends State<CreateProduct> {
         actions: <Widget>[
           IconButton(
             icon: Icon(MaterialIcons.getIconData('playlist-add')),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return CreateCategory();
+                  },
+                ),
+              );
+            },
           )
         ],
       ),
@@ -223,18 +233,35 @@ class _CreateProductState extends State<CreateProduct> {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: RaisedButton(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                          Radius.circular(8.0),
+                        )),
+                        textColor: Colors.white,
+                        color: Colors.blue,
+                        padding: const EdgeInsets.all(15.0),
+                        child: new Text(
+                          "Create",
+                        ),
+                        onPressed: () {
+                          if (_formKey.currentState.validate()) {
+                            print('validate');
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save),
-        onPressed: () {
-          if (_formKey.currentState.validate()) {
-            print('validate');
-          }
-        },
       ),
     );
   }

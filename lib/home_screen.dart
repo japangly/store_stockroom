@@ -69,13 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RegExp(r'' + criteria.toLowerCase().trim() + ''));
                     },
                     onSelect: (DocumentSnapshot value) => Navigator.push(
-                      context,
-                      PageTransition(
-                          child: ProductDetails(
-                            document: value,
-                          ),
-                          type: PageTransitionType.rightToLeftWithFade),
-                    ),
+                          context,
+                          PageTransition(
+                              child: ProductDetails(
+                                document: value,
+                              ),
+                              type: PageTransitionType.rightToLeftWithFade),
+                        ),
                     onSubmit: (String value) =>
                         Navigator.of(context).pop(value),
                   ),

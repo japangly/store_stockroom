@@ -13,7 +13,7 @@ class DoneDialog extends StatelessWidget {
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
       content: SingleChildScrollView(
         child: Container(
-          width: Environment().getWidth(width: 10),
+          width: Environment().getWidth(width: 10.0),
           child: Column(
             children: <Widget>[
               Column(
@@ -25,7 +25,7 @@ class DoneDialog extends StatelessWidget {
                   ),
                   Text(
                     'Done!',
-                    style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
+                    style: TextStyle(fontSize: 20.0),
                   ),
                 ],
               ),
