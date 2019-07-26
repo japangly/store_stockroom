@@ -8,9 +8,9 @@ import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
 class DeleteDialog extends StatelessWidget {
-  String documentId;
-  DocumentSnapshot document;
-  DeleteDialog({this.documentId, this.document, Key key}) : super(key: key);
+  final String documentId;
+  final DocumentSnapshot document;
+  DeleteDialog({ Key key, this.documentId, this.document}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
