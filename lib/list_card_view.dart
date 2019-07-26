@@ -87,12 +87,11 @@ class _ListCardViewState extends State<ListCardView> {
                                           maxFontSize: 128.0,
                                         ),
                                         AutoSizeText(
-                                          document['category']
-                                              .toString()
-                                              .toUpperCase(),
+                                          ReCase(document['category'])
+                                              .sentenceCase,
                                           style: TextStyle(color: Colors.grey),
-                                          minFontSize: 18.0,
-                                          maxFontSize: 128.0,
+                                          minFontSize: 16.0,
+                                          maxFontSize: 126.0,
                                         ),
                                       ],
                                     ),

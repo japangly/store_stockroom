@@ -94,9 +94,8 @@ class _GridCardViewState extends State<GridCardView> {
                                       Flexible(
                                         flex: 2,
                                         child: AutoSizeText(
-                                          document['category']
-                                              .toString()
-                                              .toUpperCase(),
+                                          ReCase(document['category'])
+                                              .sentenceCase,
                                           style: TextStyle(
                                             color: Colors.grey,
                                           ),

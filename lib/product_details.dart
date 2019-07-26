@@ -74,7 +74,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      widget.document.data['category'].toString().toUpperCase(),
+                      ReCase(widget.document.data['category']).sentenceCase,
                       style: ft.font15Grey,
                     ),
                   ],

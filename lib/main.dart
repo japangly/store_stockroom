@@ -6,6 +6,7 @@ void main() {
   runApp(
     MaterialApp(
       title: 'store_stockroom',
+      // home: SplashScreen(),
       home: SplashScreen(),
     ),
   );
