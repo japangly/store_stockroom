@@ -7,9 +7,9 @@ import 'package:store_stockroom/themes/helpers/fonts.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 class EditDialog extends StatelessWidget {
-  String documentId;
-  DocumentSnapshot document;
-  EditDialog({this.documentId, this.document, Key key}) : super(key: key);
+  final String documentId;
+  final DocumentSnapshot document;
+  EditDialog({Key key, this.documentId, this.document}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return AlertDialog(

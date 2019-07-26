@@ -14,30 +14,15 @@ import 'themes/helpers/theme_colors.dart';
 import 'package:intl/intl.dart';
 
 class ProductDetails extends StatefulWidget {
-  String documentId;
-  List<DocumentSnapshot> documents;
-  ProductDetails({this.documentId, this.documents, Key key}) : super(key: key);
+  final String documentId;
+  final DocumentSnapshot document;
+  ProductDetails({Key key, this.documentId, this.document}) : super(key: key);
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
-  DocumentSnapshot document;
-  @override
-  void initState() {
-    super.initState();
-    for (int i = 0; i < widget.documents.length; i++) {
-      if (widget.documents[i].documentID == widget.documentId) {
-        setState(() {
-          document = widget.documents[i];
-        });
-      } else {
-        continue;
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,15 +56,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                 width: double.infinity,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
-                  // child: Image.network(
-                  //   'https://www.natio.com.au/pub/media/catalog/product/cache/e4d64343b1bc593f1c5348fe05efa4a6/h/a/haircare_2019_product_web_images_dc_shampoo.jpg',
-                  //   height: Environment().getHeight(height: 10.0),
-                  // ),
-                  child: document.data['image'] == ''
+                  child: widget.document.data['image'] == ''
                       ? Image.network(
                           'https://www.designyourway.net/diverse/5/logininsp/2539365.jpg',
                           height: Environment().getHeight(height: 10.0))
-                      : Image.network(document.data['image'],
+                      : Image.network(widget.document.data['image'],
                           height: Environment().getHeight(height: 10.0)),
                 ),
               ),
@@ -87,7 +68,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
-                document.data['name'],
+                widget.document.data['name'],
                 style: TextStyle(
                     fontSize: 20.0,
                     color: blackColor,
@@ -97,7 +78,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             Padding(
               padding: const EdgeInsets.only(top: 5.0, left: 10.0),
               child: Text(
-                document.data['category'],
+                widget.document.data['category'],
                 style: ft.font15Grey,
               ),
             ),
@@ -113,7 +94,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         color: Colors.green[500],
                       ),
                       Text(
-                        'In Stock: ' + document.data['inStock'].toString() + '',
+                        'In Stock: ${widget.document.data['inStock'].toString()}',
                         style: TextStyle(
                           color: Colors.green[500],
                           fontWeight: FontWeight.bold,
@@ -128,7 +109,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         color: Colors.orange[500],
                       ),
                       Text(
-                        'In Use: ' + document.data['inUse'].toString() + '',
+                        'In Use: ${widget.document.data['inUse'].toString()}',
                         style: TextStyle(
                           color: Colors.orange[500],
                           fontWeight: FontWeight.bold,
@@ -154,7 +135,7 @@ class _ProductDetailsState extends State<ProductDetails> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-              child: Text(document.data['description']),
+              child: Text(widget.document.data['description']),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
@@ -167,7 +148,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                         'Created at: ' +
                             // 'Created at: 20/03/2019',
                             DateFormat("d MMM y")
-                                .format(document.data['createdAt'].toDate())
+                                .format(
+                                    widget.document.data['createdAt'].toDate())
                                 .toString() +
                             '',
                         style: TextStyle(color: Colors.blue[500]),
@@ -179,7 +161,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                       Text(
                         'Updated at: ' +
                             DateFormat("d MMM y")
-                                .format(document.data['updatedAt'].toDate())
+                                .format(
+                                    widget.document.data['updatedAt'].toDate())
                                 .toString() +
                             '',
                         style: TextStyle(color: Colors.green[500]),
@@ -207,7 +190,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     builder: (_) {
                       return DeleteDialog(
                         documentId: widget.documentId,
-                        document: document,
+                        document: widget.document,
                       );
                     });
               },
@@ -228,7 +211,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     builder: (_) {
                       return EditDialog(
                         documentId: widget.documentId,
-                        document: document,
+                        document: widget.document,
                       );
                     });
               },
