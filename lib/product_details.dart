@@ -5,9 +5,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
 import 'package:intl/intl.dart';
 import 'package:recase/recase.dart';
-import 'package:store_stockroom/dialogs/delete_dialog.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
 
+import 'database.dart';
 import 'dialogs/delete_dialog.dart';
 import 'dialogs/edit_dialog.dart';
 import 'env.dart';
@@ -15,14 +14,27 @@ import 'themes/helpers/fonts.dart' as ft;
 import 'themes/helpers/theme_colors.dart';
 
 class ProductDetails extends StatefulWidget {
-  final DocumentSnapshot document;
   ProductDetails({Key key, @required this.document}) : super(key: key);
+
+  final DocumentSnapshot document;
 
   @override
   _ProductDetailsState createState() => _ProductDetailsState();
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool _deleteState = false;
+
+  Future deleteProduct() async {
+    setState(() {
+      _deleteState = true;
+    });
+    await Database().deleteCollection(
+      collection: 'products',
+      documentId: widget.document.documentID,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,6 +93,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ],
             ),
+            Container(
+              margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20),
+              child: Divider(
+                color: Colors.black,
+                height: 10,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0),
               child: Row(
@@ -90,12 +109,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData('primitive-dot'),
-                        color: Colors.green[500],
+                        color: Colors.orange[500],
                       ),
                       Text(
-                        'In Stock: ${widget.document.data['inStock'].toString()}',
+                        'In Use: ${widget.document.data['in use'].toString()}',
                         style: TextStyle(
-                          color: Colors.green[500],
+                          color: Colors.orange[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -105,12 +124,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData('primitive-dot'),
-                        color: Colors.orange[500],
+                        color: Colors.green[500],
                       ),
                       Text(
-                        'In Use: ${widget.document.data['inUse'].toString()}',
+                        'In Stock: ${widget.document.data['in stock'].toString()}',
                         style: TextStyle(
-                          color: Colors.orange[500],
+                          color: Colors.green[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -120,11 +139,12 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
             ),
             Container(
-                margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20),
-                child: Divider(
-                  color: Colors.black,
-                  height: 10,
-                )),
+              margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 20),
+              child: Divider(
+                color: Colors.black,
+                height: 10,
+              ),
+            ),
             Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 10.0),
               child: Text(
@@ -150,7 +170,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             // 'Created at: 20/03/2019',
                             DateFormat('d MMM y')
                                 .format(
-                                    widget.document.data['createdAt'].toDate())
+                                    widget.document.data['created at'].toDate())
                                 .toString() +
                             '',
                         style: TextStyle(color: Colors.blue[500]),
@@ -163,7 +183,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         'Updated At: ' +
                             DateFormat('d MMM y')
                                 .format(
-                                    widget.document.data['updatedAt'].toDate())
+                                    widget.document.data['updated at'].toDate())
                                 .toString() +
                             '',
                         style: TextStyle(color: Colors.green[500]),
@@ -184,15 +204,32 @@ class _ProductDetailsState extends State<ProductDetails> {
               padding: const EdgeInsets.all(15.0),
               textColor: Colors.white,
               color: removeColor,
-              child: Text("Delete"),
+              child: Text('Delete'),
               onPressed: () {
                 showDialog(
-                    context: context,
-                    builder: (_) {
-                      return DeleteDialog(
-                        documentId: widget.document.documentID,
-                      );
-                    });
+                  context: context,
+                  builder: (_) {
+                    return DeleteDialog(
+                      deleteCallBack: () async {
+                        setState(() {
+                          _deleteState = true;
+                        });
+                        await Database()
+                            .deleteCollection(
+                          collection: 'products',
+                          documentId: widget.document.documentID,
+                        )
+                            .whenComplete(() {
+                          setState(() {
+                            _deleteState = false;
+                          });
+                        }).whenComplete(() {
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
+                  },
+                );
               },
             ),
           ),
