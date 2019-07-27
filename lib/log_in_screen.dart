@@ -37,13 +37,16 @@ class _LoginState extends State<LoginScreen> {
                   colors: [Colors.blue, Colors.white])),
           child: Stack(
             children: <Widget>[
-              Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Image.asset(
-                    'assets/images/login.jpg',
-                  )
-                ],
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/login.png',
+                      height: Environment().getHeight(height: 8),
+                    )
+                  ],
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(
