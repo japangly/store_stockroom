@@ -49,9 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         builder: (BuildContext context) {
           return StreamBuilder<QuerySnapshot>(
-              stream: Database().getProducts(
+              stream: Database().getStreamCollection(
                 collection: 'products',
                 orderBy: 'name',
+                isDescending: false,
               ),
               builder: (context, snapshot) {
                 return Material(
@@ -70,13 +71,13 @@ class _HomeScreenState extends State<HomeScreen> {
                           RegExp(r'' + criteria.toLowerCase().trim() + ''));
                     },
                     onSelect: (DocumentSnapshot value) => Navigator.push(
-                          context,
-                          PageTransition(
-                              child: ProductDetails(
-                                document: value,
-                              ),
-                              type: PageTransitionType.rightToLeftWithFade),
-                        ),
+                      context,
+                      PageTransition(
+                          child: ProductDetails(
+                            document: value,
+                          ),
+                          type: PageTransitionType.rightToLeftWithFade),
+                    ),
                     onSubmit: (String value) =>
                         Navigator.of(context).pop(value),
                   ),
@@ -105,30 +106,35 @@ class _HomeScreenState extends State<HomeScreen> {
         return FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () async {
-            await ImagePicker.pickImage(source: ImageSource.camera).then(
-              (imageFile) async {
-                await ImageCropper.cropImage(
-                  sourcePath: imageFile.path,
-                  toolbarTitle: 'Edit Photo',
-                  toolbarColor: Colors.blue,
-                  toolbarWidgetColor: Colors.white,
-                  ratioX: 1.0,
-                  ratioY: 1.0,
-                  maxWidth: 512,
-                  maxHeight: 512,
-                ).then((imageFile) {
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      child: CreateProduct(
-                        imageFile: imageFile,
+            try {
+              await ImagePicker.pickImage(source: ImageSource.camera).then(
+                (imageFile) async {
+                  await ImageCropper.cropImage(
+                    sourcePath: imageFile.path,
+                    toolbarTitle: 'Edit Photo',
+                    toolbarColor: Colors.blue,
+                    toolbarWidgetColor: Colors.white,
+                    ratioX: 1.0,
+                    ratioY: 1.0,
+                    maxWidth: 512,
+                    maxHeight: 512,
+                  ).then((imageFile) {
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        child: CreateProduct(
+                          imageFile: imageFile,
+                        ),
+                        type: PageTransitionType.downToUp,
                       ),
-                      type: PageTransitionType.downToUp,
-                    ),
-                  );
-                });
-              },
-            );
+                    );
+                  });
+                },
+              );
+            } catch (e) {
+              // handle error messages
+              print(e.toString());
+            }
           },
         );
         break;
