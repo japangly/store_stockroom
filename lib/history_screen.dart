@@ -147,7 +147,7 @@ class HistoryCardView extends StatelessWidget {
                       Expanded(
                         flex: 4,
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             AutoSizeText(
                               ReCase(productName).titleCase,
@@ -237,7 +237,19 @@ class HistoryCardView extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: Container(),
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: <Widget>[
+                              AutoSizeText(
+                                '2000',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                                minFontSize: 20.0,
+                                maxFontSize: 256.0,
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

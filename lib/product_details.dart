@@ -109,12 +109,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData('primitive-dot'),
-                        color: Colors.green[500],
+                        color: Colors.orange[500],
                       ),
                       Text(
-                        'In Stock: ${widget.document.data['in stock'].toString()}',
+                        'In Use: ${widget.document.data['in use'].toString()}',
                         style: TextStyle(
-                          color: Colors.green[500],
+                          color: Colors.orange[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -124,12 +124,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                     children: <Widget>[
                       Icon(
                         Octicons.getIconData('primitive-dot'),
-                        color: Colors.orange[500],
+                        color: Colors.green[500],
                       ),
                       Text(
-                        'In Use: ${widget.document.data['in use'].toString()}',
+                        'In Stock: ${widget.document.data['in stock'].toString()}',
                         style: TextStyle(
-                          color: Colors.orange[500],
+                          color: Colors.green[500],
                           fontWeight: FontWeight.bold,
                         ),
                       ),
