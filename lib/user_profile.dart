@@ -19,6 +19,12 @@ class _UserProfileState extends State<UserProfile> {
         appBar: AppBar(
           centerTitle: true,
           title: Text('Profile'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.settings),
+              onPressed: () {},
+            )
+          ],
         ),
         body: Column(
           children: <Widget>[

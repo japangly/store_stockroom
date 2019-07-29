@@ -79,7 +79,7 @@ class _DecisionRouteState extends State<DecisionRoute> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return connectionStatus == false
             ? NoInternetScreen()
-            : token.isNotEmpty ? HomeScreen() : LoginScreen();
+            : token != null ? HomeScreen() : LoginScreen();
       },
     );
   }
