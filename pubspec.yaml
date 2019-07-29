@@ -39,6 +39,8 @@ dependencies:
   intl: ^0.15.8
   firebase_auth: ^0.11.1+12
   recase: ^2.0.1
+  connectivity: ^0.4.3+6
+  shared_preferences: ^0.5.3+4
 
 
 

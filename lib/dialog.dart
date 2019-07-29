@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/buttons.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+
+import 'env.dart';
+import 'themes/helpers/buttons.dart';
+import 'themes/helpers/theme_colors.dart';
 
 void main() => runApp(MaterialApp(home: Home()));
 

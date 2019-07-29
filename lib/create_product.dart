@@ -12,6 +12,9 @@ import 'package:recase/recase.dart';
 
 import 'create_category.dart';
 import 'database.dart';
+import 'dialogs/camera_dialog.dart';
+import 'dialogs/duplicate_dialog.dart';
+import 'dialogs/error_dialog.dart';
 import 'env.dart';
 import 'storage.dart';
 
@@ -26,6 +29,7 @@ class CreateProduct extends StatefulWidget {
 
 class _CreateProductState extends State<CreateProduct> {
   TextEditingController _barCode = TextEditingController();
+  List<String> _categoryList = [];
   TextEditingController _description = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   TextEditingController _inStock = TextEditingController();
@@ -40,7 +44,9 @@ class _CreateProductState extends State<CreateProduct> {
     await Database().createCollection(
       collection: 'products',
       data: {
-        'barcode': _barCode.text.toLowerCase().trim(),
+        'barcode': _barCode.text.isNotEmpty
+            ? _barCode.text.toLowerCase().trim()
+            : Timestamp.now().millisecondsSinceEpoch.toString(),
         'name': _productName.text.toLowerCase().trim(),
         'category': _selectedSort.toString().toLowerCase().trim(),
         'in stock': int.parse(_inStock.text.trim()),
@@ -79,30 +85,59 @@ class _CreateProductState extends State<CreateProduct> {
     });
   }
 
-  dynamic checkDuplication() async {
-    return await Database().getCollectionByField(
+  Future<bool> isDuplicationExists() async {
+    DocumentSnapshot name, barcode;
+    setState(() {
+      _savingState = true;
+    });
+    name = await Database()
+        .getCollectionByField(
+      collection: 'products',
+      field: 'name',
+      value: _productName.text.toLowerCase().trim(),
+    )
+        .whenComplete(() async {
+      barcode = await Database().getCollectionByField(
         collection: 'products',
-        field: 'name',
-        value: _productName.text.toLowerCase().trim());
+        field: 'barcode',
+        value: _barCode.text.toLowerCase().trim(),
+      );
+    }).whenComplete(() {
+      setState(() {
+        _savingState = false;
+      });
+    });
+    return name != null || barcode != null;
   }
 
   Future scan() async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => this._barCode.text = barcode);
+      setState(() {
+        return this._barCode.text = barcode;
+      });
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          this._barCode.text = 'The user did not grant the camera permission!';
-        });
+        showDialog(
+            context: context,
+            builder: (_) {
+              return CameraDialog();
+            });
       } else {
-        setState(() => this._barCode.text = 'Unknown error: $e');
+        showDialog(
+            context: context,
+            builder: (_) {
+              return ErrorDialog();
+            });
       }
     } on FormatException {
-      setState(() => this._barCode.text =
-          'null (User returned using the "back"-button before scanning anything. Result)');
+      // FormatException to be handled
     } catch (e) {
-      setState(() => this._barCode.text = 'Unknown error: $e');
+      showDialog(
+          context: context,
+          builder: (_) {
+            return ErrorDialog();
+          });
     }
   }
 
@@ -111,7 +146,7 @@ class _CreateProductState extends State<CreateProduct> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Create New Product'),
+        title: Text(ReCase('create new product').titleCase),
         actions: <Widget>[
           IconButton(
             icon: Icon(MaterialIcons.getIconData('playlist-add')),
@@ -161,54 +196,68 @@ class _CreateProductState extends State<CreateProduct> {
                           maxLength: 50,
                           keyboardType: TextInputType.text,
                           decoration: InputDecoration(
-                            labelText: 'Product Name',
+                            labelText: ReCase('product name').titleCase,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
-                              return ReCase('please enter the product name')
-                                  .sentenceCase;
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20.0,
-                          right: 20.0,
-                          top: 8.0,
-                        ),
-                        child: DropdownButtonFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          hint: Text(_selectedSort),
-                          items: ['shampoo', 'conditioner']
-                              .map((category) => DropdownMenuItem(
-                                    value: category,
-                                    child: Text(ReCase(category).titleCase),
-                                  ))
-                              .toList(),
-                          onChanged: (selected) {
-                            setState(() {
-                              _selectedSort = selected;
-                            });
-                          },
-                          validator: (value) {
-                            if (value?.isEmpty ?? true) {
                               return ReCase(
-                                      'please select a category or create a new one')
-                                  .sentenceCase;
+                                'please enter the product name',
+                              ).sentenceCase;
                             }
                             return null;
                           },
                         ),
                       ),
+                      StreamBuilder<QuerySnapshot>(
+                          stream: Database().getStreamCollection(
+                            collection: 'category',
+                            orderBy: 'name',
+                            isDescending: false,
+                          ),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snapshot) {
+                            _categoryList = List<String>.from(
+                                snapshot.data.documents.first['category']);
+                            _categoryList.sort();
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                left: 20.0,
+                                right: 20.0,
+                                top: 8.0,
+                              ),
+                              child: DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                ),
+                                hint: Text(_selectedSort),
+                                items: _categoryList
+                                    .map((category) => DropdownMenuItem(
+                                          value: ReCase(category).titleCase,
+                                          child:
+                                              Text(ReCase(category).titleCase),
+                                        ))
+                                    .toList(),
+                                onChanged: (selected) {
+                                  setState(() {
+                                    _selectedSort = selected;
+                                  });
+                                },
+                                validator: (value) {
+                                  if (value?.isEmpty ?? true) {
+                                    return ReCase(
+                                      'please select a category or create a new one',
+                                    ).sentenceCase;
+                                  }
+                                  return null;
+                                },
+                              ),
+                            );
+                          }),
                       Padding(
                         padding: const EdgeInsets.only(
                           left: 20.0,
@@ -217,18 +266,19 @@ class _CreateProductState extends State<CreateProduct> {
                         ),
                         child: TextFormField(
                           controller: _inStock,
-                          maxLength: 1000,
+                          maxLength: 5,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            labelText: 'Quantity',
+                            labelText: ReCase('quantity').titleCase,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           validator: (value) {
                             if (value.isEmpty) {
-                              return ReCase('please enter the product quantity')
-                                  .sentenceCase;
+                              return ReCase(
+                                'please enter the product quantity',
+                              ).sentenceCase;
                             }
                             return null;
                           },
@@ -245,7 +295,7 @@ class _CreateProductState extends State<CreateProduct> {
                           maxLength: 1000,
                           keyboardType: TextInputType.multiline,
                           decoration: InputDecoration(
-                            labelText: 'Description',
+                            labelText: ReCase('description').titleCase,
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(8),
                             ),
@@ -267,7 +317,7 @@ class _CreateProductState extends State<CreateProduct> {
                                 keyboardType: TextInputType.text,
                                 enabled: false,
                                 decoration: InputDecoration(
-                                  labelText: 'Barcode',
+                                  labelText: ReCase('barcode').titleCase,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(8),
                                   ),
@@ -305,9 +355,17 @@ class _CreateProductState extends State<CreateProduct> {
                           child: Text(
                             ReCase('create').titleCase,
                           ),
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState.validate()) {
-                              createNewProduct();
+                              if (await isDuplicationExists()) {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return DuplicateDialog();
+                                    });
+                              } else {
+                                createNewProduct();
+                              }
                             }
                           },
                         ),

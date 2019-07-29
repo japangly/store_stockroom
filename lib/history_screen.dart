@@ -92,6 +92,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                     document['employee first name'],
                                 action: document['action'],
                                 date: document['date'],
+                                quantity: document['quantity'],
                               );
                             }).toList(),
                           );
@@ -114,8 +115,10 @@ class HistoryCardView extends StatelessWidget {
     @required this.employeeLastName,
     @required this.action,
     @required this.date,
+    @required this.quantity,
   }) : super(key: key);
 
+  final int quantity;
   final String action;
   final Timestamp date;
   final String employeeFirstName;
@@ -201,8 +204,10 @@ class HistoryCardView extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.all(4.0),
                                           child: AutoSizeText(
-                                            employeeLastName +
-                                                employeeFirstName,
+                                            ReCase(employeeLastName +
+                                                    ' ' +
+                                                    employeeFirstName)
+                                                .titleCase,
                                             style: TextStyle(),
                                             minFontSize: 8.0,
                                             maxFontSize: 128.0,
@@ -242,7 +247,7 @@ class HistoryCardView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: <Widget>[
                               AutoSizeText(
-                                '2000',
+                                quantity.toString(),
                                 style: TextStyle(fontWeight: FontWeight.bold),
                                 minFontSize: 20.0,
                                 maxFontSize: 256.0,
@@ -269,11 +274,13 @@ class HistoryCardView extends StatelessWidget {
                     Radius.circular(128.0),
                   ),
                 ),
-                color: equalsIgnoreCase(action, 'created')
+                color: (equalsIgnoreCase(action, 'created') ||
+                        equalsIgnoreCase(action, 'added'))
                     ? listColor.elementAt(1)
                     : listColor.elementAt(0),
                 elevation: 6.0,
-                child: equalsIgnoreCase(action, 'created')
+                child: (equalsIgnoreCase(action, 'created') ||
+                        equalsIgnoreCase(action, 'added'))
                     ? listIcon.elementAt(1)
                     : listIcon.elementAt(0),
               ),

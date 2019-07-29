@@ -4,12 +4,12 @@ class CustomButton extends StatefulWidget {
   CustomButton({
     @required this.onPressed,
     @required this.textButton,
-    this.colorButton,
+    this.colorButton = Colors.black,
   });
 
-  Color colorButton = Colors.black;
+  final Color colorButton;
   final GestureTapCallback onPressed;
-  String textButton;
+  final String textButton;
 
   @override
   _CustomButtonState createState() => _CustomButtonState();

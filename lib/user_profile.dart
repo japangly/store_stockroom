@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'env.dart';
 import 'themes/helpers/fonts.dart';
@@ -11,6 +12,7 @@ class UserProfile extends StatefulWidget {
 }
 
 class _UserProfileState extends State<UserProfile> {
+  SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,9 +116,13 @@ class _UserProfileState extends State<UserProfile> {
                               color: Colors.blue,
                               padding: const EdgeInsets.all(15.0),
                               child: new Text(
-                                "Logout",
+                                'Logout',
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+                                sharedPreferences =
+                                    await SharedPreferences.getInstance();
+                                sharedPreferences.clear();
+                              },
                             ),
                           ),
                         ],
