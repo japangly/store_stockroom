@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+
+import '../env.dart';
+import '../themes/helpers/fonts.dart';
+import '../themes/helpers/theme_colors.dart';
 
 class FailDialog extends StatelessWidget {
   @override
@@ -27,7 +28,7 @@ class FailDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Oops!",
+                      'Oops!',
                       style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
                     ),
                   ),

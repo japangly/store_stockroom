@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+
+import '../env.dart';
+import '../themes/helpers/fonts.dart';
 
 class DuplicateDialog extends StatelessWidget {
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+
+import '../env.dart';
+import '../themes/helpers/fonts.dart';
 
 class ErrorDialog extends StatelessWidget {
   @override
@@ -26,7 +27,7 @@ class ErrorDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Oops!",
+                      'Oops!',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),

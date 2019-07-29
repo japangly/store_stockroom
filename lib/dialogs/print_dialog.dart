@@ -6,9 +6,10 @@ import '../themes/helpers/buttons.dart';
 import '../themes/helpers/theme_colors.dart';
 
 class PrintDialog extends StatefulWidget {
+  const PrintDialog({Key key, @required this.selectedDay}) : super(key: key);
+
   final DateTime selectedDay;
 
-  const PrintDialog({Key key, @required this.selectedDay}) : super(key: key);
   @override
   _PrintDialogState createState() => _PrintDialogState();
 }

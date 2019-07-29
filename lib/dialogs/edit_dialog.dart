@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:recase/recase.dart';
 
 import '../env.dart';
 import '../themes/helpers/buttons.dart';
 import '../themes/helpers/fonts.dart';
 import '../themes/helpers/theme_colors.dart';
 
-class EditDialog extends StatelessWidget {
-  EditDialog({Key key, @required this.documentId}) : super(key: key);
+class EditDialog extends StatefulWidget {
+  EditDialog({Key key, @required this.onProductAdded}) : super(key: key);
 
-  final String documentId;
+  final ValueChanged<int> onProductAdded;
+
+  @override
+  _EditDialogState createState() => _EditDialogState();
+}
+
+class _EditDialogState extends State<EditDialog> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController _inStock = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,22 +38,34 @@ class EditDialog extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Text(
-                    "Edit Product",
+                    'Edit Product',
                     style: font20Black,
                   )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: FormBuilderTextField(
-                  attribute: "quantity",
-                  style: font15Grey,
-                  decoration: InputDecoration(
-                    labelText: "Quantity",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
+              Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20.0),
+                  child: TextFormField(
+                      style: font15Grey,
+                      controller: _inStock,
+                      maxLength: 5,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        labelText: 'Quantity',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return ReCase(
+                            'please enter the product quantity',
+                          ).sentenceCase;
+                        }
+                        return null;
+                      }),
                 ),
               ),
               Padding(
@@ -54,9 +74,11 @@ class EditDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     CustomButton(
-                      onPressed: () {},
                       textButton: 'Save',
                       colorButton: confirmColor,
+                      onPressed: () {
+                        widget.onProductAdded(int.parse(_inStock.text.trim()));
+                      },
                     ),
                   ],
                 ),

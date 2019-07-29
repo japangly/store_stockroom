@@ -1,7 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+import 'package:modal_progress_hud/modal_progress_hud.dart';
+import 'package:recase/recase.dart';
+
+import 'database.dart';
+import 'dialogs/duplicate_dialog.dart';
+import 'themes/helpers/fonts.dart';
 
 class CreateCategory extends StatefulWidget {
   @override
@@ -9,6 +14,45 @@ class CreateCategory extends StatefulWidget {
 }
 
 class _CreateCategoryState extends State<CreateCategory> {
+  TextEditingController _category = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _savingState = false;
+
+  void createNewCategory() async {
+    setState(() {
+      _savingState = true;
+    });
+    await Database().updateCollection(
+      collection: 'category',
+      documentId: 'products',
+      data: {
+        'category': FieldValue.arrayUnion([_category.text.toLowerCase().trim()])
+      },
+    ).whenComplete(() {
+      _savingState = false;
+    }).whenComplete(() {
+      Navigator.pop(context);
+    });
+  }
+
+  Future<bool> isDuplicationExists() async {
+    bool isExists = false;
+    setState(() {
+      _savingState = true;
+    });
+    DocumentSnapshot category = await Database().getCollectionByDocumentId(
+      collection: 'category',
+      documentId: 'products',
+    );
+    for (String item in List.castFrom(category.data['category'])) {
+      isExists = _category.text.toLowerCase().trim() == item;
+    }
+    setState(() {
+      _savingState = false;
+    });
+    return isExists;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,9 +62,9 @@ class _CreateCategoryState extends State<CreateCategory> {
           title: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 15.0),
+                padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  'Create New Category',
+                  ReCase('create new category').titleCase,
                   style: font20White,
                 ),
               ),
@@ -32,35 +76,47 @@ class _CreateCategoryState extends State<CreateCategory> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           behavior: HitTestBehavior.translucent,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
+          child: ModalProgressHUD(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Icon(
-                    SimpleLineIcons.getIconData("handbag"),
+                    SimpleLineIcons.getIconData('handbag'),
                     color: Colors.blue,
                     size: 60.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Category",
+                      'Category',
                       style: font20Black,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
-                        top: 20.0, left: 20.0, right: 20.0),
-                    child: FormBuilderTextField(
-                      attribute: "category", style: font15Grey,
+                      top: 20.0,
+                      left: 20.0,
+                      right: 20.0,
+                    ),
+                    child: TextFormField(
+                      controller: _category,
+                      maxLength: 1000,
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        labelText: "Category Name",
+                        labelText: ReCase('category').titleCase,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      // onChanged: _onChanged,
+                      validator: (value) {
+                        if (value.isEmpty) {
+                          return ReCase('please add the product category')
+                              .sentenceCase;
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
@@ -75,11 +131,23 @@ class _CreateCategoryState extends State<CreateCategory> {
                             )),
                             textColor: Colors.white,
                             color: Colors.blue,
-                            padding: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(16.0),
                             child: new Text(
-                              "Create",
+                              ReCase('create').titleCase,
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              if (_formKey.currentState.validate()) {
+                                if (await isDuplicationExists()) {
+                                  showDialog(
+                                      context: context,
+                                      builder: (_) {
+                                        return DuplicateDialog();
+                                      });
+                                } else {
+                                  createNewCategory();
+                                }
+                              }
+                            },
                           ),
                         ),
                       ],
@@ -87,7 +155,9 @@ class _CreateCategoryState extends State<CreateCategory> {
                   ),
                 ],
               ),
-            ],
+            ),
+            inAsyncCall: _savingState,
+            progressIndicator: CircularProgressIndicator(),
           ),
         ),
       ),

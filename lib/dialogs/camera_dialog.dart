@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/material_community_icons.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+
+import '../env.dart';
+import '../themes/helpers/fonts.dart';
 
 class CameraDialog extends StatelessWidget {
   @override
@@ -20,14 +21,14 @@ class CameraDialog extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Icon(
-                    MaterialCommunityIcons.getIconData("camera-off"),
+                    MaterialCommunityIcons.getIconData('camera-off'),
                     color: Colors.redAccent,
                     size: 60.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Camera Access",
+                      'Camera Access',
                       style: TextStyle(fontSize: 20),
                     ),
                   ),

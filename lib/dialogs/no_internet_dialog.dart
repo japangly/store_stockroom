@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+
+import '../env.dart';
+import '../themes/helpers/buttons.dart';
+import '../themes/helpers/fonts.dart';
+import '../themes/helpers/theme_colors.dart';
 
 class NoInternetDialog extends StatelessWidget {
   @override
@@ -25,12 +30,15 @@ class NoInternetDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "No Internet Connection!",
-                      style: TextStyle(fontSize: 20, fontFamily: 'Avenir'),
+                      'No Internet Connection!',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Avenir',
+                      ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0,bottom: 20.0),
+                    padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
                       'Please check your internet connection and try again.',
                       style: font15Grey,
@@ -38,6 +46,13 @@ class NoInternetDialog extends StatelessWidget {
                     ),
                   )
                 ],
+              ),
+              CustomButton(
+                textButton: 'Exit',
+                colorButton: removeColor,
+                onPressed: () {
+                  exit(0);
+                },
               ),
             ],
           ),

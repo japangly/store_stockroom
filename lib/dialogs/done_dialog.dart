@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:store_stockroom/env.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
+
+import '../env.dart';
+import '../themes/helpers/theme_colors.dart';
 
 class DoneDialog extends StatelessWidget {
   @override

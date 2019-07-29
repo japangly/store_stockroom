@@ -211,12 +211,12 @@ class ListCardView extends StatelessWidget {
                                             Icon(
                                               Octicons.getIconData(
                                                   'primitive-dot'),
-                                              color: Colors.orange[500],
+                                              color: Colors.green[500],
                                             ),
                                             Text(
-                                              'In Use: ${document['in use'].toString()}',
+                                              'In Stock: ${document['in stock'].toString()}',
                                               style: TextStyle(
-                                                color: Colors.orange[500],
+                                                color: Colors.green[500],
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -227,12 +227,12 @@ class ListCardView extends StatelessWidget {
                                             Icon(
                                               Octicons.getIconData(
                                                   'primitive-dot'),
-                                              color: Colors.green[500],
+                                              color: Colors.orange[500],
                                             ),
                                             Text(
-                                              'In Stock: ${document['in stock'].toString()}',
+                                              'In Use: ${document['in use'].toString()}',
                                               style: TextStyle(
-                                                color: Colors.green[500],
+                                                color: Colors.orange[500],
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
@@ -309,7 +309,9 @@ class GridCardView extends StatelessWidget {
                                     children: <Widget>[
                                       Expanded(
                                         child: Center(
-                                          child: Container(
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
                                             child: Image.network(
                                               document['image'],
                                             ),
@@ -353,6 +355,50 @@ class GridCardView extends StatelessWidget {
                                               children: <Widget>[
                                                 Flexible(
                                                   child: Column(
+                                                    children: <Widget>[
+                                                      Row(
+                                                        children: <Widget>[
+                                                          Icon(
+                                                            Octicons
+                                                                .getIconData(
+                                                              'primitive-dot',
+                                                            ),
+                                                            color: Colors
+                                                                .green[500],
+                                                          ),
+                                                          AutoSizeText(
+                                                            'In Stock',
+                                                            style: TextStyle(
+                                                              color: Colors
+                                                                  .green[500],
+                                                            ),
+                                                            minFontSize: 8.0,
+                                                            maxFontSize: 128.0,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(top: 4.0),
+                                                        child: AutoSizeText(
+                                                          document['in stock']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              color: Colors
+                                                                  .green[500],
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                          minFontSize: 8.0,
+                                                          maxFontSize: 128.0,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Flexible(
+                                                  child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
@@ -388,50 +434,6 @@ class GridCardView extends StatelessWidget {
                                                           style: TextStyle(
                                                               color: Colors
                                                                   .orange[500],
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          minFontSize: 8.0,
-                                                          maxFontSize: 128.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Octicons
-                                                                .getIconData(
-                                                              'primitive-dot',
-                                                            ),
-                                                            color: Colors
-                                                                .green[500],
-                                                          ),
-                                                          AutoSizeText(
-                                                            'In Stock',
-                                                            style: TextStyle(
-                                                              color: Colors
-                                                                  .green[500],
-                                                            ),
-                                                            minFontSize: 8.0,
-                                                            maxFontSize: 128.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 4.0),
-                                                        child: AutoSizeText(
-                                                          document['in stock']
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .green[500],
                                                               fontWeight:
                                                                   FontWeight
                                                                       .bold),

@@ -1,3 +1,4 @@
+import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,13 @@ import 'create_product.dart';
 import 'custom_library/search_library.dart';
 import 'dashboard_screen.dart';
 import 'database.dart';
+import 'dialogs/camera_dialog.dart';
+import 'dialogs/error_dialog.dart';
 import 'history_screen.dart';
 import 'print.dart';
 import 'product_details.dart';
 import 'user_profile.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -131,9 +135,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   });
                 },
               );
+            } on PlatformException catch (e) {
+              if (e.code == BarcodeScanner.CameraAccessDenied) {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return CameraDialog();
+                    });
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return ErrorDialog();
+                    });
+              }
+            } on FormatException {
+              // FormatException to be handled
             } catch (e) {
-              // handle error messages
-              print(e.toString());
+              // FormatException to be handled
             }
           },
         );
