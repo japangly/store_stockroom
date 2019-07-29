@@ -257,6 +257,12 @@ class _ProductDetailsState extends State<ProductDetails> {
                   ],
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0, top: 10.0),
+                child: Column(
+                  children: <Widget>[Text('By:')],
+                ),
+              )
             ],
           ),
         ),
