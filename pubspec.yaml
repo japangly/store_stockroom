@@ -42,6 +42,7 @@ dependencies:
   connectivity: ^0.4.3+6
   shared_preferences: ^0.5.3+4
   flutter_launcher_icons: ^0.7.2+1
+  gradient_app_bar: ^0.1.3
 
 
 

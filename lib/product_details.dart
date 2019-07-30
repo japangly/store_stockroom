@@ -258,9 +258,10 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 15.0, top: 10.0),
-                child: Column(
-                  children: <Widget>[Text('By:')],
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[Text('By: Lisa Blackpink')],
                 ),
               )
             ],
