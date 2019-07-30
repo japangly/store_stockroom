@@ -217,46 +217,52 @@ class _CreateProductState extends State<CreateProduct> {
                             orderBy: 'name',
                             isDescending: false,
                           ),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<QuerySnapshot> snapshot) {
-                            _categoryList = List<String>.from(
-                                snapshot.data.documents.first['category']);
-                            _categoryList.sort();
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                left: 20.0,
-                                right: 20.0,
-                                top: 8.0,
-                              ),
-                              child: DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
+                          builder: (
+                            BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot,
+                          ) {
+                            if (snapshot.hasError)
+                              return Text('Error: ${snapshot.error}');
+                            else {
+                              _categoryList = List<String>.from(
+                                  snapshot.data.documents.first['category']);
+                              _categoryList.sort();
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20.0,
+                                  right: 20.0,
+                                  top: 8.0,
                                 ),
-                                hint: Text(_selectedSort),
-                                items: _categoryList
-                                    .map((category) => DropdownMenuItem(
-                                          value: ReCase(category).titleCase,
-                                          child:
-                                              Text(ReCase(category).titleCase),
-                                        ))
-                                    .toList(),
-                                onChanged: (selected) {
-                                  setState(() {
-                                    _selectedSort = selected;
-                                  });
-                                },
-                                validator: (value) {
-                                  if (value?.isEmpty ?? true) {
-                                    return ReCase(
-                                      'please select a category or create a new one',
-                                    ).sentenceCase;
-                                  }
-                                  return null;
-                                },
-                              ),
-                            );
+                                child: DropdownButtonFormField(
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                  ),
+                                  hint: Text(_selectedSort),
+                                  items: _categoryList
+                                      .map((category) => DropdownMenuItem(
+                                            value: ReCase(category).titleCase,
+                                            child: Text(
+                                                ReCase(category).titleCase),
+                                          ))
+                                      .toList(),
+                                  onChanged: (selected) {
+                                    setState(() {
+                                      _selectedSort = selected;
+                                    });
+                                  },
+                                  validator: (value) {
+                                    if (value?.isEmpty ?? true) {
+                                      return ReCase(
+                                        'please select a category or create a new one',
+                                      ).sentenceCase;
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              );
+                            }
                           }),
                       Padding(
                         padding: const EdgeInsets.only(

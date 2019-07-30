@@ -2,6 +2,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
@@ -12,12 +13,10 @@ import 'custom_library/search_library.dart';
 import 'dashboard_screen.dart';
 import 'database.dart';
 import 'dialogs/camera_dialog.dart';
-import 'dialogs/error_dialog.dart';
 import 'history_screen.dart';
 import 'print.dart';
 import 'product_details.dart';
 import 'user_profile.dart';
-import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -146,13 +145,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 showDialog(
                     context: context,
                     builder: (_) {
-                      return ErrorDialog();
+                      return CameraDialog();
                     });
               }
             } on FormatException {
               // FormatException to be handled
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return CameraDialog();
+                  });
             } catch (e) {
               // FormatException to be handled
+              showDialog(
+                  context: context,
+                  builder: (_) {
+                    return CameraDialog();
+                  });
             }
           },
         );

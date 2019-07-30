@@ -4,12 +4,13 @@ import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_stockroom/dialogs/email_password_not_found_dialog.dart';
-import 'package:store_stockroom/functions/auth.dart';
-import 'package:store_stockroom/home_screen.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
 
+import 'dialogs/email_password_not_found_dialog.dart';
 import 'env.dart';
+import 'functions/auth.dart';
+import 'home_screen.dart';
+import 'reset_password.dart';
+import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,6 +23,47 @@ class _LoginState extends State<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _loadingState = false;
   TextEditingController _password = TextEditingController();
+
+  Future signIn(BuildContext context) async {
+    setState(() {
+      _loadingState = true;
+    });
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await Authentication()
+        .signIn(
+      email: _email.text.toLowerCase().trim(),
+      password: _password.text,
+    )
+        .then((token) {
+      sharedPreferences.setString(
+        'token',
+        token,
+      );
+      sharedPreferences.setString(
+        'email',
+        _email.text.toLowerCase().trim(),
+      );
+    }).whenComplete(() {
+      setState(() {
+        _loadingState = false;
+      });
+    }).whenComplete(() {
+      sharedPreferences.getString('token') != null
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return HomeScreen();
+                },
+              ),
+            )
+          : showDialog(
+              context: context,
+              builder: (_) {
+                return EmailPasswordNotFoundDialog();
+              });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +116,7 @@ class _LoginState extends State<LoginScreen> {
                             controller: _email,
                             keyboardType: TextInputType.emailAddress,
                             decoration: InputDecoration(
-                              labelText: 'Email',
+                              labelText: ReCase('email').titleCase,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -95,7 +137,7 @@ class _LoginState extends State<LoginScreen> {
                               obscureText: true,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
-                                labelText: 'Password',
+                                labelText: ReCase('password').titleCase,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -136,45 +178,7 @@ class _LoginState extends State<LoginScreen> {
                                     ),
                                     onPressed: () async {
                                       if (_formKey.currentState.validate()) {
-                                        setState(() {
-                                          _loadingState = true;
-                                        });
-                                        SharedPreferences sharedPreferences =
-                                            await SharedPreferences
-                                                .getInstance();
-                                        await Authentication()
-                                            .login(
-                                          email: _email.text,
-                                          password: _password.text,
-                                        )
-                                            .then((token) {
-                                          sharedPreferences.setString(
-                                            'token',
-                                            token,
-                                          );
-                                        }).whenComplete(() {
-                                          setState(() {
-                                            _loadingState = false;
-                                          });
-                                        }).whenComplete(() {
-                                          sharedPreferences
-                                                  .getString('token')
-                                                  .isNotEmpty
-                                              ? Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return HomeScreen();
-                                                    },
-                                                  ),
-                                                )
-                                              : showDialog(
-                                                  context: context,
-                                                  builder: (_) {
-                                                    return EmailPasswordNotFoundDialog();
-                                                  });
-                                        });
+                                        await signIn(context);
                                       }
                                     },
                                   ),
@@ -189,10 +193,19 @@ class _LoginState extends State<LoginScreen> {
                               children: <Widget>[
                                 FlatButton(
                                   child: Text(
-                                    'Forgot password?',
+                                    ReCase('forgot password?').titleCase,
                                     style: font15Grey,
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                          return ResetPasswordScreen();
+                                        },
+                                      ),
+                                    );
+                                  },
                                 ),
                               ],
                             ),
