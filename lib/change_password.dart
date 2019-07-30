@@ -1,10 +1,13 @@
+import 'dart:ui' as prefix1;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
+import 'package:gradient_app_bar/gradient_app_bar.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
 import 'dialogs/fail_dialog.dart';
 import 'functions/auth.dart';
 import 'successful_change.dart';
@@ -41,6 +44,27 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         FocusScope.of(context).requestFocus(FocusNode());
       },
       child: Scaffold(
+        appBar: GradientAppBar(
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: prefix0.blueColor[600],
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          title: Text('Setting'),
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: [0.6, 1.0],
+            colors: [
+              Colors.blue,
+              Colors.white,
+            ],
+          ),
+        ),
         body: Container(
           height: double.infinity,
           decoration: BoxDecoration(
