@@ -182,7 +182,7 @@ class HistoryCardView extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
                                       child: AutoSizeText(
-                                        DateFormat('d MMM y')
+                                        DateFormat('d MMMM y')
                                             .format(date.toDate())
                                             .toString(),
                                         minFontSize: 8.0,

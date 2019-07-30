@@ -46,7 +46,10 @@ class EmailPasswordNotFoundDialog extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
-                      ReCase('incorrect username or password').sentenceCase,textAlign: TextAlign.center,
+                      ReCase(
+                        'incorrect username or password',
+                      ).sentenceCase,
+                      textAlign: TextAlign.center,
                       style: font15Grey,
                     ),
                   ),

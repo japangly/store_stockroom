@@ -4,14 +4,13 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:store_stockroom/log_in_screen.dart';
 
 import 'home_screen.dart';
+import 'log_in_screen.dart';
 import 'themes/helpers/buttons.dart';
 import 'themes/helpers/fonts.dart';
 import 'themes/helpers/splash_screen_plugin.dart';
 import 'themes/helpers/theme_colors.dart';
-import 'main.dart' as global;
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -79,7 +78,7 @@ class _DecisionRouteState extends State<DecisionRoute> {
       builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
         return connectionStatus == false
             ? NoInternetScreen()
-            : token != null ? HomeScreen() : LoginScreen();
+            : (token == null) ? LoginScreen() : HomeScreen();
       },
     );
   }

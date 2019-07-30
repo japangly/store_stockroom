@@ -3,16 +3,24 @@ import 'package:recase/recase.dart';
 
 import '../env.dart';
 import '../themes/helpers/fonts.dart';
+import '../themes/helpers/theme_colors.dart';
 
-class ErrorDialog extends StatelessWidget {
+class EmailNotFoundDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       elevation: 10,
-      contentPadding:
-          const EdgeInsets.only(top: 20.0, right: 20, left: 20, bottom: 0.0),
+      contentPadding: const EdgeInsets.only(
+        top: 20.0,
+        right: 40,
+        left: 40,
+        bottom: 0.0,
+      ),
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
+        borderRadius: BorderRadius.all(
+          Radius.circular(10.0),
+        ),
+      ),
       content: SingleChildScrollView(
         child: Container(
           width: Environment().getWidth(width: 10),
@@ -21,25 +29,30 @@ class ErrorDialog extends StatelessWidget {
               Column(
                 children: <Widget>[
                   Icon(
-                    Icons.error,
-                    color: Colors.redAccent,
+                    Icons.email,
+                    color: removeColor,
                     size: 50.0,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
+                    padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      ReCase('oops!').titleCase,
-                      style: TextStyle(fontSize: 20),
+                      ReCase('email not found!').titleCase,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Avenir',
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0, bottom: 20.0),
                     child: Text(
-                      ReCase('something wrong').sentenceCase,
-                      style: font15Grey,
+                      ReCase(
+                        'please check your email or contact your store admin',
+                      ).sentenceCase,
                       textAlign: TextAlign.center,
+                      style: font15Grey,
                     ),
-                  )
+                  ),
                 ],
               ),
             ],
