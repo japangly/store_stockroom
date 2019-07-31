@@ -14,7 +14,7 @@ import 'dashboard_screen.dart';
 import 'database.dart';
 import 'dialogs/camera_dialog.dart';
 import 'history_screen.dart';
-import 'print.dart';
+import 'print_screen.dart';
 import 'product_details.dart';
 import 'user_profile.dart';
 
@@ -71,7 +71,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         .toList(),
                     filter: (DocumentSnapshot value, String criteria) {
                       return value.data['name'].toLowerCase().trim().contains(
-                          RegExp(r'' + criteria.toLowerCase().trim() + ''));
+                            RegExp(
+                              r'' + criteria.toLowerCase().trim() + '',
+                            ),
+                          );
                     },
                     onSelect: (DocumentSnapshot value) => Navigator.push(
                       context,

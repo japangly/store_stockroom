@@ -1,5 +1,3 @@
-import 'dart:ui' as prefix1;
-
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
@@ -8,6 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_stockroom/themes/helpers/theme_colors.dart' as prefix0;
+
 import 'dialogs/fail_dialog.dart';
 import 'functions/auth.dart';
 import 'successful_change.dart';
@@ -210,7 +209,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                 password: _oldPassword.text,
                                               ) !=
                                               null
-                                          ? (await Authentication()
+                                          ? await Authentication()
                                                   .changePassword(
                                               newPassword: _newPassword.text,
                                             )
@@ -232,7 +231,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                                   context: context,
                                                   builder: (_) {
                                                     return FailDialog();
-                                                  }))
+                                                  })
                                           : showDialog(
                                               context: context,
                                               builder: (_) {

@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'create_category.dart';
 import 'database.dart';
@@ -28,6 +29,8 @@ class CreateProduct extends StatefulWidget {
 }
 
 class _CreateProductState extends State<CreateProduct> {
+  SharedPreferences sharedPreferences;
+
   TextEditingController _barCode = TextEditingController();
   List<String> _categoryList = [];
   TextEditingController _description = TextEditingController();
@@ -35,7 +38,17 @@ class _CreateProductState extends State<CreateProduct> {
   TextEditingController _inStock = TextEditingController();
   TextEditingController _productName = TextEditingController();
   bool _savingState = false;
-  String _selectedSort = 'Category';
+  String _selectedCategory;
+
+  @override
+  void initState() {
+    super.initState();
+    _getSharePreference();
+  }
+
+  Future _getSharePreference() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
 
   void createNewProduct() async {
     setState(() {
@@ -48,7 +61,7 @@ class _CreateProductState extends State<CreateProduct> {
             ? _barCode.text.toLowerCase().trim()
             : Timestamp.now().millisecondsSinceEpoch.toString(),
         'name': _productName.text.toLowerCase().trim(),
-        'category': _selectedSort.toString().toLowerCase().trim(),
+        'category': _selectedCategory.toString().toLowerCase().trim(),
         'in stock': int.parse(_inStock.text.trim()),
         'description': _description.text.toLowerCase().trim(),
         'created at': Timestamp.now(),
@@ -63,18 +76,17 @@ class _CreateProductState extends State<CreateProduct> {
         'sold out': 0,
         'updated at': Timestamp.now(),
         'is price set': false,
+        'uid': sharedPreferences.getString('token'),
       },
     ).whenComplete(() async {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'created',
         'action description': 'created a new product',
-        'employee first name': 'japang',
-        'employee last name': 'ly',
         'date': Timestamp.now(),
-        'employee id': '00000001',
+        'uid': sharedPreferences.getString('token'),
         'quantity': int.parse(_inStock.text.trim()),
         'product name': _productName.text.toLowerCase().trim(),
-        'product category': _selectedSort.toString().toLowerCase().trim(),
+        'product category': _selectedCategory.toString().toLowerCase().trim(),
       });
     }).whenComplete(() {
       setState(() {
@@ -212,56 +224,63 @@ class _CreateProductState extends State<CreateProduct> {
                         ),
                       ),
                       StreamBuilder<QuerySnapshot>(
-                          stream: Database().getStreamCollection(
-                            collection: 'category',
-                            orderBy: 'name',
-                            isDescending: false,
-                          ),
-                          builder: (
-                            BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snapshot,
-                          ) {
+                          stream: Firestore.instance
+                              .collection('category')
+                              .where('name', isEqualTo: 'products')
+                              .limit(1)
+                              .snapshots(),
+                          builder: (context, snapshot) {
                             if (snapshot.hasError)
                               return Text('Error: ${snapshot.error}');
-                            else {
-                              _categoryList = List<String>.from(
-                                  snapshot.data.documents.first['category']);
-                              _categoryList.sort();
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                  left: 20.0,
-                                  right: 20.0,
-                                  top: 8.0,
-                                ),
-                                child: DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
+                            switch (snapshot.connectionState) {
+                              case ConnectionState.waiting:
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              default:
+                                _categoryList = List.from(
+                                  snapshot.data.documents.first['category'],
+                                );
+                                _categoryList.sort();
+                                return Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 20.0,
+                                    right: 20.0,
+                                    top: 8.0,
                                   ),
-                                  hint: Text(_selectedSort),
-                                  items: _categoryList
-                                      .map((category) => DropdownMenuItem(
-                                            value: ReCase(category).titleCase,
-                                            child: Text(
-                                                ReCase(category).titleCase),
-                                          ))
-                                      .toList(),
-                                  onChanged: (selected) {
-                                    setState(() {
-                                      _selectedSort = selected;
-                                    });
-                                  },
-                                  validator: (value) {
-                                    if (value?.isEmpty ?? true) {
-                                      return ReCase(
-                                        'please select a category or create a new one',
-                                      ).sentenceCase;
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              );
+                                  child: DropdownButtonFormField<String>(
+                                    value: _selectedCategory,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    hint: Text(
+                                      ReCase('selecte category').titleCase,
+                                    ),
+                                    items: _categoryList
+                                        .map((category) => DropdownMenuItem(
+                                              value: ReCase(category).titleCase,
+                                              child: Text(
+                                                ReCase(category).titleCase,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    onChanged: (selected) {
+                                      setState(() {
+                                        _selectedCategory = selected;
+                                      });
+                                    },
+                                    validator: (String value) {
+                                      if (value?.isEmpty ?? true) {
+                                        return ReCase(
+                                          'please enter the product category or create a new category',
+                                        ).sentenceCase;
+                                      }
+                                      return null;
+                                    },
+                                  ),
+                                );
                             }
                           }),
                       Padding(

@@ -8,16 +8,11 @@ class PlaygroundScreen extends StatefulWidget {
 class _PlaygroundScreenState extends State<PlaygroundScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('text'),
-        ),
-        body: Center(),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Title'),
       ),
+      body: Container(),
     );
   }
 }

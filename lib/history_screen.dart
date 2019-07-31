@@ -6,7 +6,6 @@ import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:recase/recase.dart';
 
-import 'database.dart';
 import 'themes/helpers/theme_colors.dart';
 
 List<Icon> listIcon = [
@@ -30,6 +29,18 @@ class HistoryScreen extends StatefulWidget {
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
+  DateTime _endDate = DateTime.utc(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day + 1,
+  );
+
+  DateTime _startDate = DateTime.utc(
+    DateTime.fromMicrosecondsSinceEpoch(0).year,
+    DateTime.fromMicrosecondsSinceEpoch(0).month,
+    DateTime.fromMicrosecondsSinceEpoch(0).day,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +52,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text('Select Date:'),
+              Text(ReCase('select date:').titleCase),
               IconButton(
                 icon: Icon(SimpleLineIcons.getIconData('calendar')),
                 onPressed: () {
@@ -50,7 +61,18 @@ class _HistoryScreenState extends State<HistoryScreen> {
                     showTitleActions: true,
                     minTime: DateTime(2019, 1, 1),
                     onConfirm: (date) {
-                      print('confirm $date');
+                      setState(() {
+                        _startDate = DateTime.utc(
+                          date.year,
+                          date.month,
+                          date.day,
+                        );
+                        _endDate = DateTime.utc(
+                          date.year,
+                          date.month,
+                          date.day + 1,
+                        );
+                      });
                     },
                     currentTime: DateTime.now(),
                     locale: LocaleType.en,
@@ -61,11 +83,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
           Expanded(
             child: StreamBuilder<QuerySnapshot>(
-              stream: Database().getStreamCollection(
-                collection: 'product_history',
-                orderBy: 'date',
-                isDescending: true,
-              ),
+              stream: Firestore.instance
+                  .collection('product_history')
+                  .orderBy('date', descending: true)
+                  .where('date', isGreaterThanOrEqualTo: _startDate)
+                  .where('date', isLessThanOrEqualTo: _endDate)
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (snapshot.hasError) return Text('Error: ${snapshot.error}');
@@ -86,13 +109,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               return HistoryCardView(
                                 productName: document['product name'],
                                 productCategory: document['product category'],
-                                employeeLastName:
-                                    document['employee last name'],
-                                employeeFirstName:
-                                    document['employee first name'],
                                 action: document['action'],
                                 date: document['date'],
                                 quantity: document['quantity'],
+                                uid: document['uid'],
                               );
                             }).toList(),
                           );
@@ -111,20 +131,18 @@ class HistoryCardView extends StatelessWidget {
     Key key,
     @required this.productName,
     @required this.productCategory,
-    @required this.employeeFirstName,
-    @required this.employeeLastName,
     @required this.action,
     @required this.date,
     @required this.quantity,
+    @required this.uid,
   }) : super(key: key);
 
-  final int quantity;
   final String action;
   final Timestamp date;
-  final String employeeFirstName;
-  final String employeeLastName;
   final String productCategory;
   final String productName;
+  final int quantity;
+  final String uid;
 
   bool equalsIgnoreCase(String a, String b) {
     return (a == null && b == null) ||
@@ -174,7 +192,7 @@ class HistoryCardView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     AutoSizeText(
-                                      'Date',
+                                      ReCase('date').titleCase,
                                       minFontSize: 8.0,
                                       maxFontSize: 128.0,
                                       style: TextStyle(color: Colors.grey),
@@ -201,18 +219,48 @@ class HistoryCardView extends StatelessWidget {
                                     ),
                                     Row(
                                       children: <Widget>[
-                                        Padding(
-                                          padding: const EdgeInsets.all(4.0),
-                                          child: AutoSizeText(
-                                            ReCase(employeeLastName +
-                                                    ' ' +
-                                                    employeeFirstName)
-                                                .titleCase,
-                                            style: TextStyle(),
-                                            minFontSize: 8.0,
-                                            maxFontSize: 128.0,
-                                          ),
-                                        ),
+                                        StreamBuilder<QuerySnapshot>(
+                                            stream: Firestore.instance
+                                                .collection('employees')
+                                                .where('uid', isEqualTo: uid)
+                                                .limit(1)
+                                                .snapshots(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.hasError)
+                                                return Text(
+                                                    'Error: ${snapshot.error}');
+                                              switch (
+                                                  snapshot.connectionState) {
+                                                case ConnectionState.waiting:
+                                                  return Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  );
+                                                default:
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            4.0),
+                                                    child: AutoSizeText(
+                                                      ReCase(snapshot
+                                                                      .data
+                                                                      .documents
+                                                                      .first[
+                                                                  'first name'] +
+                                                              ' ' +
+                                                              snapshot
+                                                                      .data
+                                                                      .documents
+                                                                      .first[
+                                                                  'last name'])
+                                                          .titleCase,
+                                                      style: TextStyle(),
+                                                      minFontSize: 8.0,
+                                                      maxFontSize: 128.0,
+                                                    ),
+                                                  );
+                                              }
+                                            }),
                                       ],
                                     ),
                                   ],
@@ -220,7 +268,7 @@ class HistoryCardView extends StatelessWidget {
                                 Column(
                                   children: <Widget>[
                                     AutoSizeText(
-                                      'Action',
+                                      ReCase('action').titleCase,
                                       minFontSize: 8.0,
                                       maxFontSize: 128.0,
                                       style: TextStyle(color: Colors.grey),
