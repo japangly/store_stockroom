@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_icons/simple_line_icons.dart';
-import 'package:store_stockroom/dialogs/print_dialog.dart';
-import 'package:store_stockroom/themes/helpers/buttons.dart';
-import 'package:store_stockroom/themes/helpers/fonts.dart';
+import 'package:intl/intl.dart';
+import 'package:recase/recase.dart';
+
+import 'dialogs/print_dialog.dart';
+import 'themes/helpers/buttons.dart';
+import 'themes/helpers/fonts.dart';
 import 'themes/helpers/theme_colors.dart';
 
 class PrintScreen extends StatefulWidget {
@@ -23,7 +26,7 @@ class _PrintScreenState extends State<PrintScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 15.0),
                 child: Text(
-                  'Print Report',
+                  ReCase('print report').titleCase,
                   style: font20White,
                 ),
               ),
@@ -37,14 +40,14 @@ class _PrintScreenState extends State<PrintScreen> {
               Column(
                 children: <Widget>[
                   Icon(
-                    SimpleLineIcons.getIconData("printer"),
+                    SimpleLineIcons.getIconData('printer'),
                     color: Colors.blue,
                     size: 60.0,
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Choose a date!",
+                      ReCase('choose a date!').titleCase,
                       style: TextStyle(fontSize: 20),
                     ),
                   ),
@@ -58,38 +61,44 @@ class _PrintScreenState extends State<PrintScreen> {
                             DatePicker.showDatePicker(context,
                                 showTitleActions: true,
                                 minTime: DateTime(2019, 1, 1),
-                                onChanged: (date) {
-                              print('change $date');
-                            }, onConfirm: (date) {
-                              print('confirm $date');
+                                onConfirm: (date) async {
                               showDialog(
                                   context: context,
                                   builder: (_) {
                                     return PrintDialog(
-                                      selectedDay: date,
+                                      dateTime: date,
+                                      selectedDate: ReCase(
+                                              DateFormat('yMMMMEEEEd')
+                                                  .format(date)
+                                                  .toString())
+                                          .titleCase,
                                     );
                                   });
                             },
                                 currentTime: DateTime.now(),
                                 locale: LocaleType.en);
                           },
-                          textButton: 'Another Day',
+                          textButton: ReCase('another day').titleCase,
                           colorButton: cancelColor,
                         ),
                         SizedBox(
                           width: 10,
                         ),
                         CustomButton(
-                          onPressed: () {
+                          onPressed: () async {
                             showDialog(
                                 context: context,
                                 builder: (_) {
                                   return PrintDialog(
-                                    selectedDay: DateTime.now(),
+                                    dateTime: DateTime.now(),
+                                    selectedDate: ReCase(DateFormat('yMMMMEEEEd')
+                                            .format(DateTime.now())
+                                            .toString())
+                                        .titleCase,
                                   );
                                 });
                           },
-                          textButton: 'Today',
+                          textButton: ReCase('today').titleCase,
                           colorButton: blueColor,
                         ),
                       ],

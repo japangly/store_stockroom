@@ -6,6 +6,7 @@ import 'package:flutter_icons/octicons.dart';
 import 'package:intl/intl.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'database.dart';
 import 'dialogs/delete_dialog.dart';
@@ -25,7 +26,21 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  SharedPreferences sharedPreferences;
+  String token;
+
   bool _loadingState = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _getSharePreference();
+  }
+
+  Future _getSharePreference() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+    token = sharedPreferences.getString('token');
+  }
 
   void deleteProduct() async {
     Navigator.pop(context);
@@ -47,10 +62,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'deleted',
         'action description': 'deleted existing product from stock',
-        'employee first name': 'japang',
-        'employee last name': 'ly',
         'date': Timestamp.now(),
-        'employee id': '00000001',
+        'uid': token.trim(),
         'quantity': widget.document.data['in stock'],
         'product name': widget.document.data['name'],
         'product category': widget.document.data['category'],
@@ -80,10 +93,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'added',
         'action description': 'added more products into stock',
-        'employee first name': 'japang',
-        'employee last name': 'ly',
         'date': Timestamp.now(),
-        'employee id': '00000001',
+        'uid': token.trim(),
         'quantity': value,
         'product name': widget.document.data['name'],
         'product category': widget.document.data['category'],
@@ -261,7 +272,31 @@ class _ProductDetailsState extends State<ProductDetails> {
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[Text('By: Lisa Blackpink')],
+                  children: <Widget>[
+                    StreamBuilder<QuerySnapshot>(
+                      stream: Firestore.instance
+                          .collection('employees')
+                          .where(
+                            'uid',
+                            isEqualTo: widget.document.data['uid'],
+                          )
+                          .limit(1)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError)
+                          return Text('Error: ${snapshot.error}');
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          default:
+                            return Text(
+                                'By: ${ReCase(snapshot.data.documents.first['first name'] + ' ' + snapshot.data.documents.first['last name']).titleCase}');
+                        }
+                      },
+                    ),
+                  ],
                 ),
               )
             ],
