@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:recase/recase.dart';
 
 import 'create_product.dart';
@@ -76,14 +75,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           );
                     },
-                    onSelect: (DocumentSnapshot value) => Navigator.push(
-                      context,
-                      PageTransition(
-                          child: ProductDetails(
-                            document: value,
-                          ),
-                          type: PageTransitionType.rightToLeftWithFade),
-                    ),
+                    onSelect: (DocumentSnapshot value) {
+                      return Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return ProductDetails(
+                              document: value,
+                            );
+                          },
+                        ),
+                      );
+                    },
                     onSubmit: (String value) =>
                         Navigator.of(context).pop(value),
                   ),
@@ -127,11 +130,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ).then((imageFile) {
                     Navigator.push(
                       context,
-                      PageTransition(
-                        child: CreateProduct(
-                          imageFile: imageFile,
-                        ),
-                        type: PageTransitionType.downToUp,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) {
+                          return CreateProduct(
+                            imageFile: imageFile,
+                          );
+                        },
                       ),
                     );
                   });

@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_icons/octicons.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:recase/recase.dart';
 
 import 'database.dart';
@@ -146,11 +145,12 @@ class ListCardView extends StatelessWidget {
                             onTap: () {
                               Navigator.push(
                                 context,
-                                PageTransition(
-                                  child: ProductDetails(
-                                    document: document,
-                                  ),
-                                  type: PageTransitionType.rightToLeftWithFade,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                    return ProductDetails(
+                                      document: document,
+                                    );
+                                  },
                                 ),
                               );
                             },
@@ -455,12 +455,12 @@ class GridCardView extends StatelessWidget {
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    PageTransition(
-                                      child: ProductDetails(
-                                        document: document,
-                                      ),
-                                      type: PageTransitionType
-                                          .rightToLeftWithFade,
+                                    MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                        return ProductDetails(
+                                          document: document,
+                                        );
+                                      },
                                     ),
                                   );
                                 },
