@@ -187,7 +187,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           color: Colors.green[500],
                         ),
                         Text(
-                          'In Stock: ${widget.document.data['in stock'].toString()}',
+                          'In Stock: ${widget.document.data['in_stock'].toString()}',
                           style: TextStyle(
                             color: Colors.green[500],
                             fontWeight: FontWeight.bold,
@@ -202,7 +202,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           color: Colors.orange[500],
                         ),
                         Text(
-                          'In Use: ${widget.document.data['in use'].toString()}',
+                          'In Use: ${widget.document.data['in_use'].toString()}',
                           style: TextStyle(
                             color: Colors.orange[500],
                             fontWeight: FontWeight.bold,
@@ -244,7 +244,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                           'Created At: ' +
                               // 'Created at: 20/03/2019',
                               DateFormat('d MMM y')
-                                  .format(widget.document.data['created at']
+                                  .format(widget.document.data['created_at']
                                       .toDate())
                                   .toString() +
                               '',
@@ -257,7 +257,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                         Text(
                           'Updated At: ' +
                               DateFormat('d MMM y')
-                                  .format(widget.document.data['updated at']
+                                  .format(widget.document.data['updated_at']
                                       .toDate())
                                   .toString() +
                               '',
@@ -292,7 +292,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                             );
                           default:
                             return Text(
-                                'By: ${ReCase(snapshot.data.documents.first['first name'] + ' ' + snapshot.data.documents.first['last name']).titleCase}');
+                                'By: ${ReCase(snapshot.data.documents.first['first_name'] + ' ' + snapshot.data.documents.first['last_name']).titleCase}');
                         }
                       },
                     ),
