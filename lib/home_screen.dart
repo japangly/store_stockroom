@@ -7,6 +7,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:recase/recase.dart';
 
+import 'confirm_product_screen.dart';
 import 'create_product.dart';
 import 'custom_library/search_library.dart';
 import 'dashboard_screen.dart';
@@ -32,9 +33,7 @@ class HomeScreen extends StatefulWidget {
 int _selectedIndex = 0;
 List<Widget> _widgetOptions = <Widget>[
   DashboardScreen(),
-  Center(
-    child: Text('Coming Soon!'),
-  ),
+  ConfirmProductScreen(),
   HistoryScreen(),
 ];
 List<String> _names = [];
