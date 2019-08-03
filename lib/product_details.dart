@@ -51,7 +51,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         .deleteFile(
       collection: 'products',
       fileName:
-          widget.document.data['created at'].millisecondsSinceEpoch.toString(),
+          widget.document.data['created_at'].millisecondsSinceEpoch.toString(),
     )
         .whenComplete(() async {
       await Database().deleteCollection(
@@ -64,9 +64,9 @@ class _ProductDetailsState extends State<ProductDetails> {
         'action description': 'deleted existing product from stock',
         'date': Timestamp.now(),
         'uid': token.trim(),
-        'quantity': widget.document.data['in stock'],
-        'product name': widget.document.data['name'],
-        'product category': widget.document.data['category'],
+        'quantity': widget.document.data['in_stock'],
+        'name': widget.document.data['name'],
+        'category': widget.document.data['category'],
       });
     }).whenComplete(() {
       setState(() {
@@ -86,8 +86,8 @@ class _ProductDetailsState extends State<ProductDetails> {
       collection: 'products',
       documentId: widget.document.documentID,
       data: {
-        'in stock': value + widget.document.data['in stock'],
-        'updated at': Timestamp.now(),
+        'in_stock': value + widget.document.data['in_stock'],
+        'updated_at': Timestamp.now(),
       },
     ).whenComplete(() async {
       await Database().createCollection(collection: 'product_history', data: {
@@ -96,8 +96,8 @@ class _ProductDetailsState extends State<ProductDetails> {
         'date': Timestamp.now(),
         'uid': token.trim(),
         'quantity': value,
-        'product name': widget.document.data['name'],
-        'product category': widget.document.data['category'],
+        'name': widget.document.data['name'],
+        'category': widget.document.data['category'],
       });
     }).whenComplete(() {
       _loadingState = false;
