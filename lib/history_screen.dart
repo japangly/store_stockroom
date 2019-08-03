@@ -246,13 +246,13 @@ class HistoryCardView extends StatelessWidget {
                                                                       .data
                                                                       .documents
                                                                       .first[
-                                                                  'first name'] +
+                                                                  'first_name'] +
                                                               ' ' +
                                                               snapshot
                                                                       .data
                                                                       .documents
                                                                       .first[
-                                                                  'last name'])
+                                                                  'last_name'])
                                                           .titleCase,
                                                       style: TextStyle(),
                                                       minFontSize: 8.0,
