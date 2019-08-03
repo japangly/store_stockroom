@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Database {
   Stream<QuerySnapshot> getStreamCollection({
@@ -16,13 +17,19 @@ class Database {
         .snapshots();
   }
 
-  Future<DocumentSnapshot> getCurrentUserInfo({@required String userId}) async {
-    QuerySnapshot querySnapshot = await Firestore.instance
-        .collection('employees')
-        .where('uid', isEqualTo: userId)
-        .limit(1)
-        .getDocuments();
-    return querySnapshot.documents.first;
+  Future<QuerySnapshot> getCurrentUserInfo() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+      QuerySnapshot querySnapshot = await Firestore.instance
+          .collection('employees')
+          .where('uid', isEqualTo: sharedPreferences.get('token'))
+          .limit(1)
+          .getDocuments();
+      return querySnapshot;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<List<DocumentSnapshot>> getAllCollection({

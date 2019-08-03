@@ -6,6 +6,7 @@ import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:store_stockroom/change_password.dart';
+import 'package:store_stockroom/database.dart';
 
 import 'env.dart';
 import 'functions/auth.dart';
@@ -78,174 +79,166 @@ class _UserProfileState extends State<UserProfile> {
         ],
       ),
       body: ModalProgressHUD(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: Firestore.instance
-              .collection('employees')
-              .where('uid', isEqualTo: token)
-              .limit(1)
-              .snapshots(),
+        child: FutureBuilder<QuerySnapshot>(
+          future: Database().getCurrentUserInfo(),
           builder: (
             BuildContext context,
             AsyncSnapshot<QuerySnapshot> snapshot,
           ) {
-            if (snapshot.hasError) return Text('Error: ${snapshot.error}');
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              default:
-                return Column(
-                  children: <Widget>[
-                    Expanded(
-                      child: ListView(children: <Widget>[
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
+            if (snapshot.data == null) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            return Column(
+              children: <Widget>[
+                Expanded(
+                  child: ListView(children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 20.0, bottom: 15.0),
+                          child: Center(
+                            child: Container(
+                              width: Environment().getHeight(height: 8),
+                              height: Environment().getHeight(height: 8),
+                              child: CircleAvatar(
+                                minRadius: Environment().getHeight(height: 3),
+                                maxRadius: Environment().getHeight(height: 3),
+                                backgroundImage: NetworkImage(
+                                  snapshot.data.documents.first['image'],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                         Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              ReCase(
+                                snapshot.data.documents.first['first_name'] +
+                                    ' ' +
+                                    snapshot.data.documents.first['last_name'],
+                              ).titleCase,
+                              style: font20Black,
+                            )
+                          ],
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20.0, bottom: 15.0),
-                              child: Center(
-                                child: Container(
-                                  width: Environment().getHeight(height: 8),
-                                  height: Environment().getHeight(height: 8),
-                                  child: CircleAvatar(
-                                    minRadius:
-                                        Environment().getHeight(height: 3),
-                                    maxRadius:
-                                        Environment().getHeight(height: 3),
-                                    backgroundImage: NetworkImage(
-                                      snapshot.data.documents.first['image'],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  ReCase(
-                                    snapshot.data.documents
-                                            .first['first_name'] +
-                                        ' ' +
-                                        snapshot
-                                            .data.documents.first['last_name'],
-                                  ).titleCase,
-                                  style: font20Black,
-                                )
-                              ],
-                            ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    ReCase(snapshot
-                                            .data.documents.first['role'])
-                                        .titleCase,
-                                    style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: blackColor,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            ListTile(
-                              title: Text(
-                                ReCase('phone number').titleCase,
-                                style: font15Grey,
-                              ),
-                              trailing: Text(
-                                snapshot.data.documents.first['phone_number'],
-                                style: font15Black,
-                              ),
-                            ),
-                            ListTile(
-                              title: Text(
-                                ReCase('email').titleCase,
-                                style: font15Grey,
-                              ),
-                              trailing: Text(
-                                snapshot.data.documents.first['email']
-                                    .toString()
-                                    .toLowerCase(),
-                                style: font15Black,
-                              ),
-                            ),
-                            ListTile(
-                              title: Text(
-                                ReCase('birthday').titleCase,
-                                style: font15Grey,
-                              ),
-                              trailing: Text(
-                                ReCase(
-                                  DateFormat('d MMMM y')
-                                      .format(
-                                        snapshot.data.documents
-                                            .first['date_of_birth']
-                                            .toDate(),
-                                      )
-                                      .toString(),
-                                ).titleCase,
-                                style: font15Black,
-                              ),
-                            ),
-                            ListTile(
-                              title: Text(
-                                ReCase('place of birth').titleCase,
-                                style: font15Grey,
-                              ),
-                              trailing: Text(
-                                ReCase(snapshot
-                                        .data.documents.first['place_of_birth'])
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                ReCase(snapshot.data.documents.first['role'])
                                     .titleCase,
-                                style: font15Black,
-                              ),
-                            ),
-                            ListTile(
-                              title: Text(
-                                ReCase('address').titleCase,
-                                style: font15Grey,
-                              ),
-                              trailing: Text(
-                                ReCase(snapshot.data.documents.first['address'])
-                                    .titleCase,
-                                style: font15Black,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: RaisedButton(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                        Radius.circular(8.0),
-                                      )),
-                                      textColor: Colors.white,
-                                      color: Colors.blue,
-                                      padding: const EdgeInsets.all(15.0),
-                                      child: Text(
-                                        ReCase('sign out').titleCase,
-                                      ),
-                                      onPressed: () async {
-                                        await _signOut(context);
-                                      },
-                                    ),
-                                  ),
-                                ],
+                                style: TextStyle(
+                                  fontSize: 12.0,
+                                  color: blackColor,
+                                ),
                               ),
                             ),
                           ],
-                        )
-                      ]),
-                    ),
-                  ],
-                );
-            }
+                        ),
+                        ListTile(
+                          title: Text(
+                            ReCase('phone number').titleCase,
+                            style: font15Grey,
+                          ),
+                          trailing: Text(
+                            snapshot.data.documents.first['phone_number'],
+                            style: font15Black,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            ReCase('email').titleCase,
+                            style: font15Grey,
+                          ),
+                          trailing: Text(
+                            snapshot.data.documents.first['email']
+                                .toString()
+                                .toLowerCase(),
+                            style: font15Black,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            ReCase('birthday').titleCase,
+                            style: font15Grey,
+                          ),
+                          trailing: Text(
+                            ReCase(
+                              DateFormat('d MMMM y')
+                                  .format(
+                                    snapshot
+                                        .data.documents.first['date_of_birth']
+                                        .toDate(),
+                                  )
+                                  .toString(),
+                            ).titleCase,
+                            style: font15Black,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            ReCase('place of birth').titleCase,
+                            style: font15Grey,
+                          ),
+                          trailing: Text(
+                            ReCase(snapshot
+                                    .data.documents.first['place_of_birth'])
+                                .titleCase,
+                            style: font15Black,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            ReCase('address').titleCase,
+                            style: font15Grey,
+                          ),
+                          trailing: Text(
+                            ReCase(snapshot.data.documents.first['address'])
+                                .titleCase,
+                            style: font15Black,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: RaisedButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  )),
+                                  textColor: Colors.white,
+                                  color: Colors.blue,
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: Text(
+                                    ReCase('sign out').titleCase,
+                                  ),
+                                  onPressed: () async {
+                                    await _signOut(context);
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ]),
+                ),
+              ],
+            );
           },
         ),
         inAsyncCall: _loadingState,
