@@ -382,7 +382,7 @@ class GridCardView extends StatelessWidget {
                                                             const EdgeInsets
                                                                 .only(top: 4.0),
                                                         child: AutoSizeText(
-                                                          document['in stock']
+                                                          document['in_stock']
                                                               .toString(),
                                                           style: TextStyle(
                                                               color: Colors
@@ -429,7 +429,7 @@ class GridCardView extends StatelessWidget {
                                                             const EdgeInsets
                                                                 .only(top: 4.0),
                                                         child: AutoSizeText(
-                                                          document['in use']
+                                                          document['in_use']
                                                               .toString(),
                                                           style: TextStyle(
                                                               color: Colors

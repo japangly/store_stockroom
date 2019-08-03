@@ -107,8 +107,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             children: snapshot.data.documents
                                 .map((DocumentSnapshot document) {
                               return HistoryCardView(
-                                productName: document['product name'],
-                                productCategory: document['product category'],
+                                productName: document['name'],
+                                productCategory: document['category'],
                                 action: document['action'],
                                 date: document['date'],
                                 quantity: document['quantity'],
