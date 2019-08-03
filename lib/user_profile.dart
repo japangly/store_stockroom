@@ -126,10 +126,10 @@ class _UserProfileState extends State<UserProfile> {
                                 Text(
                                   ReCase(
                                     snapshot.data.documents
-                                            .first['first name'] +
+                                            .first['first_name'] +
                                         ' ' +
                                         snapshot
-                                            .data.documents.first['last name'],
+                                            .data.documents.first['last_name'],
                                   ).titleCase,
                                   style: font20Black,
                                 )
@@ -158,7 +158,7 @@ class _UserProfileState extends State<UserProfile> {
                                 style: font15Grey,
                               ),
                               trailing: Text(
-                                snapshot.data.documents.first['phone number'],
+                                snapshot.data.documents.first['phone_number'],
                                 style: font15Black,
                               ),
                             ),
@@ -184,7 +184,7 @@ class _UserProfileState extends State<UserProfile> {
                                   DateFormat('d MMMM y')
                                       .format(
                                         snapshot.data.documents
-                                            .first['date of birth']
+                                            .first['date_of_birth']
                                             .toDate(),
                                       )
                                       .toString(),
@@ -199,7 +199,7 @@ class _UserProfileState extends State<UserProfile> {
                               ),
                               trailing: Text(
                                 ReCase(snapshot
-                                        .data.documents.first['place of birth'])
+                                        .data.documents.first['place_of_birth'])
                                     .titleCase,
                                 style: font15Black,
                               ),
