@@ -61,12 +61,12 @@ class _ProductDetailsState extends State<ProductDetails> {
     }).whenComplete(() async {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'deleted',
-        'action description': 'deleted existing product from stock',
         'date': Timestamp.now(),
         'uid': token.trim(),
         'quantity': widget.document.data['in_stock'],
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
+        'is_pending' : false
       });
     }).whenComplete(() {
       setState(() {
@@ -92,12 +92,12 @@ class _ProductDetailsState extends State<ProductDetails> {
     ).whenComplete(() async {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'added',
-        'action description': 'added more products into stock',
         'date': Timestamp.now(),
         'uid': token.trim(),
         'quantity': value,
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
+        'is_pending':false,
       });
     }).whenComplete(() {
       _loadingState = false;

@@ -121,7 +121,7 @@ class ListCardView extends StatelessWidget {
       child: StreamBuilder<QuerySnapshot>(
         stream: Database().getStreamCollection(
           collection: 'products',
-          orderBy: _selectedSortBy.toLowerCase(),
+          orderBy: ReCase(_selectedSortBy).snakeCase,
           isDescending: _isDescending,
         ),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -266,7 +266,7 @@ class GridCardView extends StatelessWidget {
       child: StreamBuilder<QuerySnapshot>(
         stream: Database().getStreamCollection(
           collection: 'products',
-          orderBy: _selectedSortBy.toLowerCase().trim(),
+          orderBy: ReCase(_selectedSortBy).snakeCase,
           isDescending: _isDescending,
         ),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
