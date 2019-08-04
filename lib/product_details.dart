@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         'quantity': widget.document.data['in_stock'],
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
-        'is_pending' : false
+        'is_pending': false
       });
     }).whenComplete(() {
       setState(() {
@@ -97,7 +98,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         'quantity': value,
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
-        'is_pending':false,
+        'is_pending': false,
       });
     }).whenComplete(() {
       _loadingState = false;
@@ -115,7 +116,7 @@ class _ProductDetailsState extends State<ProductDetails> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.only(top: 15.0),
-              child: Text(
+              child: AutoSizeText(
                 'Product Details',
                 style: ft.font20White,
               ),
@@ -145,12 +146,11 @@ class _ProductDetailsState extends State<ProductDetails> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text(
+                      AutoSizeText(
                         ReCase(widget.document.data['name']).titleCase,
+                        minFontSize: 24.0,
                         style: TextStyle(
-                            fontSize: 20.0,
-                            color: blackColor,
-                            fontWeight: FontWeight.bold),
+                            color: blackColor, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -222,83 +222,131 @@ class _ProductDetailsState extends State<ProductDetails> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, left: 10.0),
-                child: Text(
+                child: AutoSizeText(
                   'Description',
-                  style: ft.font20Black,
+                  minFontSize: 16.0,
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 10.0),
-                child: Text(widget.document['description'] == ''
-                    ? ReCase('no description provided').sentenceCase
-                    : ReCase(widget.document.data['description']).sentenceCase),
+                padding: const EdgeInsets.only(left: 5.0, top: 5.0),
+                child: SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    child: Card(
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: AutoSizeText(
+                          widget.document['description'] == ''
+                              ? ReCase('no description provided').sentenceCase
+                              : ReCase(widget.document.data['description'])
+                                  .sentenceCase,
+                          minFontSize: 12.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                padding: const EdgeInsets.only(top: 5.0, left: 5.0, right: 5.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Created At: ' +
-                              // 'Created at: 20/03/2019',
-                              DateFormat('d MMM y')
-                                  .format(widget.document.data['created_at']
-                                      .toDate())
-                                  .toString() +
-                              '',
-                          style: TextStyle(color: Colors.blue[500]),
-                        ),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: AutoSizeText(
+                        'By',
+                        minFontSize: 16.0,
+                        style: TextStyle(fontWeight: FontWeight.normal),
+                      ),
                     ),
-                    Row(
-                      children: <Widget>[
-                        Text(
-                          'Updated At: ' +
-                              DateFormat('d MMM y')
-                                  .format(widget.document.data['updated_at']
-                                      .toDate())
-                                  .toString() +
-                              '',
-                          style: TextStyle(color: Colors.green[500]),
+                    Card(
+                      elevation: 2.0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: <Widget>[
+                            StreamBuilder<QuerySnapshot>(
+                              stream: Firestore.instance
+                                  .collection('employees')
+                                  .where(
+                                    'uid',
+                                    isEqualTo: widget.document.data['uid'],
+                                  )
+                                  .limit(1)
+                                  .snapshots(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError)
+                                  return Text('Error: ${snapshot.error}');
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.waiting:
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  default:
+                                    return AutoSizeText(
+                                      '${ReCase(snapshot.data.documents.first['first_name'] + ' ' + snapshot.data.documents.first['last_name']).titleCase}',
+                                      minFontSize: 16.0,
+                                    );
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ],
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+                padding: const EdgeInsets.only(top: 10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    StreamBuilder<QuerySnapshot>(
-                      stream: Firestore.instance
-                          .collection('employees')
-                          .where(
-                            'uid',
-                            isEqualTo: widget.document.data['uid'],
-                          )
-                          .limit(1)
-                          .snapshots(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError)
-                          return Text('Error: ${snapshot.error}');
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          default:
-                            return Text(
-                                'By: ${ReCase(snapshot.data.documents.first['first_name'] + ' ' + snapshot.data.documents.first['last_name']).titleCase}');
-                        }
-                      },
+                    Row(
+                      children: <Widget>[
+                        Card(
+                          elevation: 2.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text(
+                              'Created At: ' +
+                                  // 'Created at: 20/03/2019',
+                                  DateFormat('d MMM y')
+                                      .format(widget.document.data['created_at']
+                                          .toDate())
+                                      .toString() +
+                                  '',
+                              style: TextStyle(color: Colors.blue[500]),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Card(
+                          elevation: 2.0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: AutoSizeText(
+                              'Updated At: ' +
+                                  DateFormat('d MMM y')
+                                      .format(widget.document.data['updated_at']
+                                          .toDate())
+                                      .toString() +
+                                  '',
+                              style: TextStyle(color: Colors.green[500]),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),
