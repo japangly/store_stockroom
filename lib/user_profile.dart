@@ -93,7 +93,6 @@ class _UserProfileState extends State<UserProfile> {
                 child: CircularProgressIndicator(),
               );
             }
-
             return Column(
               children: <Widget>[
                 Expanded(

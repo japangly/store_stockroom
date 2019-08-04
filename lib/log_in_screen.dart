@@ -171,7 +171,7 @@ class _LoginState extends State<LoginScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: <Widget>[
                                         Text(
-                                          'Proceed'.toUpperCase(),
+                                          'proceed'.toUpperCase(),
                                         ),
                                         Icon(Icons.arrow_forward)
                                       ],

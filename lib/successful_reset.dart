@@ -58,7 +58,10 @@ class _LoginState extends State<SuccessResetScreen> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 20.0, bottom: 10.0),
+                  padding: const EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 10.0,
+                  ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
