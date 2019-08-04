@@ -67,7 +67,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         'quantity': widget.document.data['in_stock'],
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
-        'is_pending' : false
+        'is_pending': false
       });
     }).whenComplete(() {
       setState(() {
@@ -98,7 +98,7 @@ class _ProductDetailsState extends State<ProductDetails> {
         'quantity': value,
         'name': widget.document.data['name'],
         'category': widget.document.data['category'],
-        'is_pending':false,
+        'is_pending': false,
       });
     }).whenComplete(() {
       _loadingState = false;
@@ -225,6 +225,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                 child: AutoSizeText(
                   'Description',
                   minFontSize: 16.0,
+                  style: TextStyle(fontWeight: FontWeight.normal),
                 ),
               ),
               Padding(
@@ -258,6 +259,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       child: AutoSizeText(
                         'By',
                         minFontSize: 16.0,
+                        style: TextStyle(fontWeight: FontWeight.normal),
                       ),
                     ),
                     Card(
