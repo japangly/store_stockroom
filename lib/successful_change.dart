@@ -47,15 +47,20 @@ class _SuccessChangedScreenState extends State<SuccessChangedScreen> {
                 Text(
                   ReCase('successful password changed!').sentenceCase,
                   style: TextStyle(
-                      fontFamily: 'Realistica',
-                      fontSize: 20.0,
-                      color: blueColor[900]),
+                    fontFamily: 'Realistica',
+                    fontSize: 20.0,
+                    color: blueColor[900],
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 40.0, bottom: 30.0),
                   child: Text(
-                    'You can now use your new password to log in to your account!',
-                    style: TextStyle(fontSize: 15.0, color: prefix0.blackColor),
+                    ReCase('you can now use your new password to log in to your account!')
+                        .sentenceCase,
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      color: prefix0.blackColor,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

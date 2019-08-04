@@ -3,7 +3,6 @@ import 'package:flutter/painting.dart';
 import 'package:flutter/widgets.dart';
 import 'package:modal_progress_hud/modal_progress_hud.dart';
 import 'package:recase/recase.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'dialogs/email_not_found_dialog.dart';
 import 'functions/auth.dart';
@@ -16,21 +15,9 @@ class ResetPasswordScreen extends StatefulWidget {
 }
 
 class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
-  SharedPreferences sharedPreferences;
-
   TextEditingController _email = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _loadingState = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _getSharePreference();
-  }
-
-  Future _getSharePreference() async {
-    sharedPreferences = await SharedPreferences.getInstance();
-  }
 
   Future _resetPassword(BuildContext context) async {
     setState(() {
@@ -38,16 +25,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     });
     await Authentication()
             .resetPassword(email: _email.text.toLowerCase().trim())
-        ? sharedPreferences.clear().whenComplete(() {
-            Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (context) {
-                  return SuccessResetScreen();
-                },
-              ),
-              (Route<dynamic> route) => false,
-            );
-          })
+        ? Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+              builder: (context) {
+                return SuccessResetScreen();
+              },
+            ),
+            (Route<dynamic> route) => false,
+          )
         : showDialog(
             context: context,
             builder: (_) {

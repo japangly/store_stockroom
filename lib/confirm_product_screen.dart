@@ -1,13 +1,11 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_icons/simple_line_icons.dart';
 import 'package:intl/intl.dart';
 import 'package:recase/recase.dart';
-import 'package:store_stockroom/themes/helpers/theme_colors.dart';
 
 import 'database.dart';
+import 'themes/helpers/theme_colors.dart';
 
 class ConfirmProductScreen extends StatefulWidget {
   @override
@@ -38,9 +36,7 @@ class _ConfirmProductScreenState extends State<ConfirmProductScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: Firestore.instance
                   .collection('product_history')
-                  .where('action', isEqualTo: 'to_use')
                   .where('is_pending', isEqualTo: true)
-                  // .orderBy('date', descending: true)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {

@@ -19,7 +19,6 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   SharedPreferences sharedPreferences;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _loadingState = false;
   TextEditingController _newPassword = TextEditingController();
@@ -34,6 +33,51 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
 
   Future _getSharePreference() async {
     sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  Future _changePassword(BuildContext context) async {
+    if (_newPassword.text == _retypeNewPassword.text) {
+      setState(() {
+        _loadingState = true;
+      });
+      await Authentication().signIn(
+                email: sharedPreferences.getString('email'),
+                password: _oldPassword.text,
+              ) !=
+              null
+          ? await Authentication().changePassword(
+              newPassword: _newPassword.text,
+            )
+              ? sharedPreferences.clear().whenComplete(() {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return SuccessChangedScreen();
+                      },
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                })
+              : showDialog(
+                  context: context,
+                  builder: (_) {
+                    return FailDialog();
+                  })
+          : showDialog(
+              context: context,
+              builder: (_) {
+                return FailDialog();
+              });
+      setState(() {
+        _loadingState = false;
+      });
+    } else {
+      showDialog(
+          context: context,
+          builder: (_) {
+            return FailDialog();
+          });
+    }
   }
 
   @override
@@ -53,7 +97,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               Navigator.pop(context);
             },
           ),
-          title: Text('Setting'),
+          title: Text(ReCase('setting').titleCase),
           gradient: LinearGradient(
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
@@ -180,9 +224,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             Expanded(
                               child: RaisedButton(
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                  Radius.circular(8.0),
-                                )),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
                                 textColor: Colors.white,
                                 color: Colors.blue,
                                 padding: const EdgeInsets.all(15.0),
@@ -198,55 +243,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                                 ),
                                 onPressed: () async {
                                   if (_formKey.currentState.validate()) {
-                                    if (_newPassword.text ==
-                                        _retypeNewPassword.text) {
-                                      setState(() {
-                                        _loadingState = true;
-                                      });
-                                      await Authentication().signIn(
-                                                email: sharedPreferences
-                                                    .getString('email'),
-                                                password: _oldPassword.text,
-                                              ) !=
-                                              null
-                                          ? await Authentication()
-                                                  .changePassword(
-                                              newPassword: _newPassword.text,
-                                            )
-                                              ? sharedPreferences
-                                                  .clear()
-                                                  .whenComplete(() {
-                                                  Navigator.of(context)
-                                                      .pushAndRemoveUntil(
-                                                    MaterialPageRoute(
-                                                      builder: (context) {
-                                                        return SuccessChangedScreen();
-                                                      },
-                                                    ),
-                                                    (Route<dynamic> route) =>
-                                                        false,
-                                                  );
-                                                })
-                                              : showDialog(
-                                                  context: context,
-                                                  builder: (_) {
-                                                    return FailDialog();
-                                                  })
-                                          : showDialog(
-                                              context: context,
-                                              builder: (_) {
-                                                return FailDialog();
-                                              });
-                                      setState(() {
-                                        _loadingState = false;
-                                      });
-                                    } else {
-                                      showDialog(
-                                          context: context,
-                                          builder: (_) {
-                                            return FailDialog();
-                                          });
-                                    }
+                                    await _changePassword(context);
                                   }
                                 },
                               ),
