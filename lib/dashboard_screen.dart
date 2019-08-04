@@ -155,6 +155,7 @@ class ListCardView extends StatelessWidget {
                               );
                             },
                             child: Card(
+                              elevation: 5.0,
                               child: Padding(
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
@@ -168,7 +169,7 @@ class ListCardView extends StatelessWidget {
                                           child: Image.network(
                                             document['image'],
                                             height: Environment()
-                                                .getHeight(height: 3.0),
+                                                .getHeight(height: 3.5),
                                           ),
                                         ),
                                         Padding(
@@ -184,7 +185,7 @@ class ListCardView extends StatelessWidget {
                                                 style: TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                 ),
-                                                minFontSize: 20.0,
+                                                minFontSize: 24.0,
                                                 maxFontSize: 128.0,
                                               ),
                                               AutoSizeText(
@@ -193,7 +194,7 @@ class ListCardView extends StatelessWidget {
                                                     .toUpperCase(),
                                                 style: TextStyle(
                                                     color: Colors.grey),
-                                                minFontSize: 18.0,
+                                                minFontSize: 12.0,
                                                 maxFontSize: 128.0,
                                               ),
                                             ],
@@ -284,6 +285,7 @@ class GridCardView extends StatelessWidget {
                     )
                   : GridView.builder(
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        childAspectRatio: 0.75,
                         crossAxisCount: 2,
                       ),
                       itemCount: snapshot.data.documents.length,
@@ -292,6 +294,7 @@ class GridCardView extends StatelessWidget {
                             snapshot.data.documents[index];
                         return Container(
                           child: Card(
+                            elevation: 5.0,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.all(
                                 Radius.circular(8.0),
@@ -307,7 +310,7 @@ class GridCardView extends StatelessWidget {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Expanded(
+                                      Flexible(
                                         child: Center(
                                           child: ClipRRect(
                                             borderRadius:
@@ -321,130 +324,133 @@ class GridCardView extends StatelessWidget {
                                       Flexible(
                                         child: Column(
                                           children: <Widget>[
-                                            Flexible(
-                                              child: AutoSizeText(
-                                                ReCase(document['name'])
-                                                    .titleCase,
-                                                style: TextStyle(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                                minFontSize: 8.0,
-                                                maxFontSize: 128.0,
+                                            AutoSizeText(
+                                              ReCase(document['name'])
+                                                  .titleCase,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
                                               ),
+                                              minFontSize: 24.0,
+                                              maxFontSize: 128.0,
                                             ),
-                                            Flexible(
-                                              child: AutoSizeText(
-                                                document['category']
-                                                    .toString()
-                                                    .toUpperCase(),
-                                                style: TextStyle(
-                                                  color: Colors.grey,
-                                                ),
-                                                minFontSize: 8.0,
-                                                maxFontSize: 128.0,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Divider(
+                                            AutoSizeText(
+                                              document['category']
+                                                  .toString()
+                                                  .toUpperCase(),
+                                              style: TextStyle(
                                                 color: Colors.grey,
                                               ),
+                                              minFontSize: 8.0,
+                                              maxFontSize: 128.0,
                                             ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: <Widget>[
-                                                Flexible(
-                                                  child: Column(
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Octicons
-                                                                .getIconData(
-                                                              'primitive-dot',
-                                                            ),
-                                                            color: Colors
-                                                                .green[500],
-                                                          ),
-                                                          AutoSizeText(
-                                                            'In Stock',
-                                                            style: TextStyle(
+                                            Divider(
+                                              color: Colors.grey,
+                                            ),
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: <Widget>[
+                                                  Flexible(
+                                                    child: Column(
+                                                      children: <Widget>[
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Icon(
+                                                              Octicons
+                                                                  .getIconData(
+                                                                'primitive-dot',
+                                                              ),
                                                               color: Colors
                                                                   .green[500],
                                                             ),
-                                                            minFontSize: 8.0,
-                                                            maxFontSize: 128.0,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 4.0),
-                                                        child: AutoSizeText(
-                                                          document['in_stock']
-                                                              .toString(),
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .green[500],
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          minFontSize: 8.0,
-                                                          maxFontSize: 128.0,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                Flexible(
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: <Widget>[
-                                                      Row(
-                                                        children: <Widget>[
-                                                          Icon(
-                                                            Octicons
-                                                                .getIconData(
-                                                              'primitive-dot',
+                                                            AutoSizeText(
+                                                              'In Stock',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                    .green[500],
+                                                              ),
+                                                              minFontSize: 8.0,
+                                                              maxFontSize:
+                                                                  128.0,
                                                             ),
-                                                            color: Colors
-                                                                .orange[500],
-                                                          ),
-                                                          AutoSizeText(
-                                                            'In Use',
+                                                          ],
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 4.0),
+                                                          child: AutoSizeText(
+                                                            document['in_stock']
+                                                                .toString(),
                                                             style: TextStyle(
-                                                              color: Colors
-                                                                  .orange[500],
-                                                            ),
+                                                                color: Colors
+                                                                    .green[500],
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
                                                             minFontSize: 8.0,
                                                             maxFontSize: 128.0,
                                                           ),
-                                                        ],
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .only(top: 4.0),
-                                                        child: AutoSizeText(
-                                                          document['in_use']
-                                                              .toString(),
-                                                          style: TextStyle(
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  Flexible(
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: <Widget>[
+                                                        Row(
+                                                          children: <Widget>[
+                                                            Icon(
+                                                              Octicons
+                                                                  .getIconData(
+                                                                'primitive-dot',
+                                                              ),
                                                               color: Colors
                                                                   .orange[500],
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                          minFontSize: 8.0,
-                                                          maxFontSize: 128.0,
+                                                            ),
+                                                            AutoSizeText(
+                                                              'In Use',
+                                                              style: TextStyle(
+                                                                color: Colors
+                                                                        .orange[
+                                                                    500],
+                                                              ),
+                                                              minFontSize: 8.0,
+                                                              maxFontSize:
+                                                                  128.0,
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ),
-                                                    ],
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .only(
+                                                                  top: 4.0),
+                                                          child: AutoSizeText(
+                                                            document['in_use']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                        .orange[
+                                                                    500],
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            minFontSize: 8.0,
+                                                            maxFontSize: 128.0,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
                                           ],
                                         ),
