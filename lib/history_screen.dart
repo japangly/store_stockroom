@@ -85,9 +85,10 @@ class _HistoryScreenState extends State<HistoryScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: Firestore.instance
                   .collection('product_history')
-                  .orderBy('date', descending: true)
+                  .where('is_pending', isEqualTo: false)
                   .where('date', isGreaterThanOrEqualTo: _startDate)
                   .where('date', isLessThanOrEqualTo: _endDate)
+                  .orderBy('date', descending: true)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -153,7 +154,8 @@ class HistoryCardView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: AlignmentDirectional.topEnd,
-      children: <Widget>[
+      children:
+      <Widget>[
         SingleChildScrollView(
           child: Container(
             child: Padding(
@@ -176,12 +178,12 @@ class HistoryCardView extends StatelessWidget {
                               minFontSize: 20.0,
                               maxFontSize: 256.0,
                             ),
-                            AutoSizeText(
-                              ReCase(productCategory).sentenceCase,
-                              style: TextStyle(color: Colors.grey),
-                              minFontSize: 8.0,
-                              maxFontSize: 256.0,
-                            ),
+                          AutoSizeText(
+                            ReCase(productCategory).sentenceCase,
+                            style: TextStyle(color: Colors.grey),
+                            minFontSize: 8.0,
+                            maxFontSize: 256.0,
+                          ),
                             Divider(
                               color: cancelColor,
                             ),

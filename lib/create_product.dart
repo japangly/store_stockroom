@@ -81,12 +81,12 @@ class _CreateProductState extends State<CreateProduct> {
     ).whenComplete(() async {
       await Database().createCollection(collection: 'product_history', data: {
         'action': 'created',
-        // 'action_description': 'created a new product',
         'date': Timestamp.now(),
         'uid': sharedPreferences.getString('token'),
         'quantity': int.parse(_inStock.text.trim()),
         'name': _productName.text.toLowerCase().trim(),
         'category': _selectedCategory.toString().toLowerCase().trim(),
+        'is_pending': false,
       });
     }).whenComplete(() {
       setState(() {
